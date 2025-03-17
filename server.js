@@ -80,13 +80,14 @@ app.post('/verify-payment', async (req, res) => {
             const tx = await solConnection.getParsedTransaction(txHash, { maxSupportedTransactionVersion: 0 });
             if (!tx || tx.meta.err) throw new Error('Transaction failed');
 
+            const tokenAccounts = await solConnection.getTokenAccountsByOwner(new PublicKey(userAddress), { mint: solUsdcMint });
             const transfer = tx.meta.innerInstructions
                 .flatMap(i => i.instructions)
                 .find(i => 
                     i.programId.equals(TOKEN_PROGRAM_ID) &&
                     i.parsed.type === 'transfer' &&
                     i.parsed.info.destination === solWalletAddress.toString() &&
-                    i.parsed.info.source === (await solConnection.getTokenAccountsByOwner(new PublicKey(userAddress), { mint: solUsdcMint })).value[0].pubkey.toString()
+                    i.parsed.info.source === tokenAccounts.value[0].pubkey.toString()
                 );
 
             if (!transfer || transfer.parsed.info.amount < feeExpected) {
