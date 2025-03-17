@@ -38,7 +38,7 @@
         </div>
         <div class="content">
             <h1>Unleash the Future of Trading</h1>
-            <p>Deploy volume bots and sneaker bots for $100 each—fees paid in USDC to a single wallet.</p>
+            <p>Deploy volume bots and sneaker bots for $100 each—paid in USDC via MetaMask or Phantom.</p>
             <a href="#signup" class="button">Launch Bots Now</a>
         </div>
     </section>
@@ -47,7 +47,6 @@
         <section class="volume-bots" id="volume-bots">
             <h2 class="section-title">Volume Bot Control Center</h2>
             <p>Boost your crypto trading volume with AI-driven automation. Fee: $100 per bot (USDC).</p>
-            <p class="fee-note">All fees sent to: <span class="usdc-address">0x89F6...EaA4</span></p>
             <div class="volume-bot-grid">
                 <div class="volume-bot-card">
                     <div class="icon">⚡</div>
@@ -103,7 +102,6 @@
         <section class="sneaker-bot" id="sneaker-bot">
             <h2 class="section-title sneaker-title">Sneaker Bot Arsenal</h2>
             <p>Dominate sneaker drops with precision automation. Fee: $100 per use (USDC).</p>
-            <p class="fee-note">All fees sent to: <span class="usdc-address">0x89F6...EaA4</span></p>
             <div class="sneaker-bot-form">
                 <form id="sneaker-bot-form">
                     <input type="text" name="url" placeholder="Sneaker URL (e.g., nike.com/launch)" required>
@@ -143,7 +141,7 @@
 
         <section class="signup" id="signup">
             <h2 class="section-title">Join the Crypto Revolution</h2>
-            <p>Sign up to access volume bots and sneaker bots—$100 per bot, paid in USDC.</p>
+            <p>Sign up to access volume bots and sneaker bots—$100 per bot, paid in USDC via MetaMask or Phantom.</p>
             <form id="signup-form">
                 <input type="email" name="email" placeholder="Enter Your Email" required>
                 <button type="submit" class="button">Activate Your Account</button>
@@ -164,7 +162,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- Add ethers.js and solana/web3.js for wallet interactions -->
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
     <script>
+        const { ethers } = window;
+        const { solanaWeb3 } = window;
+
         particlesJS("particles-js", {
             particles: {
                 number: { value: 120, density: { enable: true, value_area: 800 } },
@@ -196,32 +200,84 @@
             alert('Account activated! Welcome to CryptoVoltron.');
         });
 
-        // Sneaker Bot with Fee
-        document.getElementById('sneaker-bot-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const url = document.querySelector('input[name="url"]').value;
-            const size = document.querySelector('input[name="size"]').value;
-            const quantity = document.querySelector('input[name="quantity"]').value;
-            const status = document.getElementById('sneaker-bot-status');
+        // Payment function supporting MetaMask and Phantom
+        async function payWithWallet(botType, crypto, volume, form, status) {
+            const ethProvider = window.ethereum; // MetaMask
+            const solProvider = window.solana; // Phantom
 
-            status.textContent = `Processing $100 USDC payment to 0x89F6...EaA4...`;
+            if (!ethProvider && !solProvider) {
+                alert('Please install MetaMask or Phantom wallet to pay with USDC');
+                return;
+            }
+
+            status.textContent = 'Awaiting $100 USDC payment...';
             status.style.color = 'var(--vibe-cyan)';
 
-            const txHash = await sendUSDC(100, '0x89F6637FBB92be90Ef6e2DaE70C34bC02837EaA4');
-            if (txHash) {
-                status.textContent = `Payment confirmed! Initializing Sneaker Bot for ${quantity} pair(s) of size ${size} from ${url}...`;
+            try {
+                if (ethProvider) {
+                    // MetaMask (Ethereum)
+                    const provider = new ethers.providers.Web3Provider(ethProvider);
+                    await provider.send('eth_requestAccounts', []);
+                    const signer = provider.getSigner();
+                    const usdcContract = new ethers.Contract(
+                        '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC on Ethereum
+                        ['function transfer(address to, uint256 value) returns (bool)'], // Minimal ABI
+                        signer
+                    );
+                    const fee = ethers.utils.parseUnits('100', 6); // USDC has 6 decimals
+                    const walletAddress = '0xYourEthereumUSDCWalletAddressHere'; // Replace securely
+
+                    const tx = await usdcContract.transfer(walletAddress, fee);
+                    await tx.wait();
+
+                    status.textContent = `Payment confirmed via MetaMask! Deploying ${botType}...`;
+                } else if (solProvider && solProvider.isPhantom) {
+                    // Phantom (Solana)
+                    await solProvider.connect();
+                    const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed');
+                    const usdcMint = new solanaWeb3.PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'); // USDC on Solana
+                    const walletAddress = new solanaWeb3.PublicKey('YourSolanaUSDCWalletAddressHere'); // Replace securely
+                    const userPublicKey = solProvider.publicKey;
+
+                    const transaction = new solanaWeb3.Transaction().add(
+                        solanaWeb3.SystemProgram.transfer({
+                            fromPubkey: userPublicKey,
+                            toPubkey: walletAddress,
+                            lamports: 0, // We'll use SPL token transfer instead
+                        })
+                    );
+
+                    // SPL Token Transfer (USDC)
+                    const tokenAccountFrom = await connection.getTokenAccountsByOwner(userPublicKey, { mint: usdcMint });
+                    const tokenAccountTo = await connection.getTokenAccountsByOwner(walletAddress, { mint: usdcMint });
+                    const fee = 100 * 10 ** 6; // USDC has 6 decimals
+
+                    transaction.add(
+                        solanaWeb3.Token.createTransferInstruction(
+                            solanaWeb3.TOKEN_PROGRAM_ID,
+                            tokenAccountFrom.value[0].pubkey,
+                            tokenAccountTo.value[0].pubkey,
+                            userPublicKey,
+                            [],
+                            fee
+                        )
+                    );
+
+                    const { signature } = await solProvider.signAndSendTransaction(transaction);
+                    await connection.confirmTransaction(signature);
+
+                    status.textContent = `Payment confirmed via Phantom! Deploying ${botType}...`;
+                }
+
                 setTimeout(() => {
-                    status.textContent = 'Scanning site... Adding to cart...';
-                }, 2000);
-                setTimeout(() => {
-                    status.textContent = 'Checking out... Success! Sneakers copped!';
+                    status.textContent = `Success! ${botType} deployed for ${crypto} with ${volume}!`;
                     status.style.color = 'var(--neon-lime)';
-                }, 4000);
-            } else {
-                status.textContent = 'Payment failed. Please try again.';
-                status.style.color = 'var(--neon-red)';
+                }, 2000);
+            } catch (error) {
+                status.textContent = `Error: ${error.message}`;
+                status.style.color = 'var(--vibe-pink)';
             }
-        });
+        }
 
         // Volume Bots with Fee
         document.querySelectorAll('.volume-bot-form').forEach(form => {
@@ -231,65 +287,19 @@
                 const volume = form.querySelector('input[name="volume"]').value;
                 const type = form.dataset.type;
                 const status = form.nextElementSibling;
-
-                status.textContent = `Processing $100 USDC payment to 0x89F6...EaA4...`;
-                status.style.color = 'var(--vibe-cyan)';
-
-                const txHash = await sendUSDC(100, '0x89F6637FBB92be90Ef6e2DaE70C34bC02837EaA4');
-                if (txHash) {
-                    status.textContent = `Payment confirmed! Deploying ${type.replace('-', ' ')} bot for ${crypto} with ${volume} volume...`;
-                    setTimeout(() => {
-                        status.textContent = `Bot active: Monitoring ${crypto}...`;
-                    }, 2000);
-                    setTimeout(() => {
-                        status.textContent = `Success! ${type.replace('-', ' ')} bot deployed for ${crypto} with ${volume} volume!`;
-                        status.style.color = 'var(--neon-lime)';
-                    }, 4000);
-                } else {
-                    status.textContent = 'Payment failed. Please try again.';
-                    status.style.color = 'var(--neon-red)';
-                }
+                await payWithWallet(type.replace('-', ' '), crypto, volume, form, status);
             });
         });
 
-        async function connectMetaMask() {
-            if (typeof window.ethereum !== 'undefined') {
-                try {
-                    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-                    console.log('Connected account:', accounts[0]);
-                    return accounts[0];
-                } catch (error) {
-                    console.error('User rejected the request:', error);
-                }
-            } else {
-                alert('MetaMask is not installed. Please install it to use this feature.');
-            }
-        }
-
-        async function sendUSDC(amount, toAddress) {
-            const account = await connectMetaMask();
-            if (!account) return;
-
-            const transactionParameters = {
-                to: toAddress,
-                from: account,
-                value: '0x0', // 0 ETH
-                data: '0xa9059cbb' + // transfer method ID
-                      '000000000000000000000000' + toAddress.slice(2) + // recipient address
-                      '000000000000000000000000000000000000000000000000' + (amount * 1e6).toString(16).padStart(24, '0') // amount in hex
-            };
-
-            try {
-                const txHash = await ethereum.request({
-                    method: 'eth_sendTransaction',
-                    params: [transactionParameters],
-                });
-                console.log('Transaction hash:', txHash);
-                return txHash;
-            } catch (error) {
-                console.error('Transaction failed:', error);
-            }
-        }
+        // Sneaker Bot with Fee
+        document.getElementById('sneaker-bot-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const url = document.querySelector('input[name="url"]').value;
+            const size = document.querySelector('input[name="size"]').value;
+            const quantity = document.querySelector('input[name="quantity"]').value;
+            const status = document.getElementById('sneaker-bot-status');
+            await payWithWallet('Sneaker Bot', url, `${size}-${quantity}`, e.target, status);
+        });
     </script>
 </body>
 </html>
