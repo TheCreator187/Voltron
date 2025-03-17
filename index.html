@@ -11,30 +11,27 @@
     <link href="css/styles.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-    <!-- Futuristic Background -->
     <div class="background">
         <div class="gradient-overlay"></div>
         <div class="grid-lines"></div>
         <div id="particles-js"></div>
     </div>
 
-    <!-- Navigation -->
     <nav class="navbar">
         <a href="#" class="logo">
             <span class="logo-text">VoltronBot</span>
-            <span class="logo-subtext">by LaunchPad</span>
+            <span class="logo-subtext">by TheCreator</span>
         </a>
         <span class="menu-toggle">☰</span>
         <div class="nav-links">
             <a href="#home">Home</a>
-            <a href="#features">Features</a>
+            <a href="#volume-bots">Volume Bots</a>
             <a href="#sneaker-bot" class="highlight-link">Sneaker Bot</a>
             <a href="#signup">Sign Up</a>
             <a href="#contact">Contact</a>
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="hero-background">
             <img src="images/hero-background.jpg" alt="Crypto Space Background">
@@ -46,30 +43,64 @@
         </div>
     </section>
 
-    <!-- Features Section -->
     <main class="main">
-        <section class="features" id="features">
-            <h2 class="section-title">Next-Level Bot Power</h2>
-            <div class="feature-grid">
-                <div class="feature-card">
+        <!-- Volume Bots Section (Replaces Features) -->
+        <section class="volume-bots" id="volume-bots">
+            <h2 class="section-title">Volume Bot Control Center</h2>
+            <p>Boost your crypto trading volume with AI-driven automation—configure and deploy bots instantly.</p>
+            <div class="volume-bot-grid">
+                <div class="volume-bot-card">
                     <div class="icon">⚡</div>
                     <h3>Universal Chain Sync</h3>
-                    <p>Seamless bot coverage for Bitcoin, Ethereum, altcoins—every token, every chain.</p>
+                    <p>Sync bots across all chains.</p>
+                    <form class="volume-bot-form" data-type="chain-sync">
+                        <select name="crypto" required>
+                            <option value="">Select Crypto</option>
+                            <option value="BTC">Bitcoin (BTC)</option>
+                            <option value="ETH">Ethereum (ETH)</option>
+                            <option value="BNB">BNB (BNB)</option>
+                        </select>
+                        <input type="number" name="volume" placeholder="Target Volume" min="1" required>
+                        <button type="submit" class="button">Deploy</button>
+                    </form>
+                    <div class="volume-bot-status"></div>
                 </div>
-                <div class="feature-card">
+                <div class="volume-bot-card">
                     <div class="icon">📈</div>
                     <h3>Hyper Volume Boost</h3>
-                    <p>Spike trading volume with AI-driven bots, engineered for maximum liquidity impact.</p>
+                    <p>Spike volume with AI precision.</p>
+                    <form class="volume-bot-form" data-type="volume-boost">
+                        <select name="crypto" required>
+                            <option value="">Select Crypto</option>
+                            <option value="BTC">Bitcoin (BTC)</option>
+                            <option value="ETH">Ethereum (ETH)</option>
+                            <option value="BNB">BNB (BNB)</option>
+                        </select>
+                        <input type="number" name="volume" placeholder="Boost Amount" min="1" required>
+                        <button type="submit" class="button">Deploy</button>
+                    </form>
+                    <div class="volume-bot-status"></div>
                 </div>
-                <div class="feature-card">
+                <div class="volume-bot-card">
                     <div class="icon">🚀</div>
                     <h3>Instant Deployment</h3>
-                    <p>Plug in, power up—intuitive dashboard, real-time control, zero downtime.</p>
+                    <p>Launch bots in real-time.</p>
+                    <form class="volume-bot-form" data-type="instant-deploy">
+                        <select name="crypto" required>
+                            <option value="">Select Crypto</option>
+                            <option value="BTC">Bitcoin (BTC)</option>
+                            <option value="ETH">Ethereum (ETH)</option>
+                            <option value="BNB">BNB (BNB)</option>
+                        </select>
+                        <input type="number" name="volume" placeholder="Initial Volume" min="1" required>
+                        <button type="submit" class="button">Deploy</button>
+                    </form>
+                    <div class="volume-bot-status"></div>
                 </div>
             </div>
         </section>
 
-        <!-- Sneaker Bot Section (Moved Up) -->
+        <!-- Sneaker Bot Section -->
         <section class="sneaker-bot" id="sneaker-bot">
             <h2 class="section-title sneaker-title">Sneaker Bot Arsenal</h2>
             <p>Dominate sneaker drops with precision automation—cop exclusives from Nike, Adidas, and more.</p>
@@ -88,46 +119,16 @@
         <section class="features">
             <h2 class="section-title crypto-title">Supported Cryptocurrencies</h2>
             <div class="crypto-grid">
-                <div class="crypto-item">
-                    <img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/color/btc.png" alt="Bitcoin">
-                    <span>Bitcoin (BTC)</span>
-                </div>
-                <div class="crypto-item">
-                    <img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/color/eth.png" alt="Ethereum">
-                    <span>Ethereum (ETH)</span>
-                </div>
-                <div class="crypto-item">
-                    <img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/color/bnb.png" alt="BNB">
-                    <span>BNB (BNB)</span>
-                </div>
-                <div class="crypto-item">
-                    <img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/color/xrp.png" alt="XRP">
-                    <span>XRP (XRP)</span>
-                </div>
-                <div class="crypto-item">
-                    <img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/color/ada.png" alt="Cardano">
-                    <span>Cardano (ADA)</span>
-                </div>
-                <div class="crypto-item">
-                    <img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/color/sol.png" alt="Solana">
-                    <span>Solana (SOL)</span>
-                </div>
-                <div class="crypto-item">
-                    <img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/color/doge.png" alt="Dogecoin">
-                    <span>Dogecoin (DOGE)</span>
-                </div>
-                <div class="crypto-item">
-                    <img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/color/dot.png" alt="Polkadot">
-                    <span>Polkadot (DOT)</span>
-                </div>
-                <div class="crypto-item">
-                    <img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/color/ltc.png" alt="Litecoin">
-                    <span>Litecoin (LTC)</span>
-                </div>
-                <div class="crypto-item">
-                    <img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/color/link.png" alt="Chainlink">
-                    <span>Chainlink (LINK)</span>
-                </div>
+                <div class="crypto-item"><img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/color/btc.png" alt="Bitcoin"><span>Bitcoin (BTC)</span></div>
+                <div class="crypto-item"><img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/color/eth.png" alt="Ethereum"><span>Ethereum (ETH)</span></div>
+                <div class="crypto-item"><img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/color/bnb.png" alt="BNB"><span>BNB (BNB)</span></div>
+                <div class="crypto-item"><img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/color/xrp.png" alt="XRP"><span>XRP (XRP)</span></div>
+                <div class="crypto-item"><img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/color/ada.png" alt="Cardano"><span>Cardano (ADA)</span></div>
+                <div class="crypto-item"><img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/color/sol.png" alt="Solana"><span>Solana (SOL)</span></div>
+                <div class="crypto-item"><img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/color/doge.png" alt="Dogecoin"><span>Dogecoin (DOGE)</span></div>
+                <div class="crypto-item"><img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/color/dot.png" alt="Polkadot"><span>Polkadot (DOT)</span></div>
+                <div class="crypto-item"><img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/color/ltc.png" alt="Litecoin"><span>Litecoin (LTC)</span></div>
+                <div class="crypto-item"><img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/color/link.png" alt="Chainlink"><span>Chainlink (LINK)</span></div>
             </div>
             <p class="crypto-note">And thousands more—bots for every crypto, no exceptions!</p>
         </section>
@@ -136,18 +137,9 @@
         <section class="testimonials" id="testimonials">
             <h2 class="section-title">What Our Users Say</h2>
             <div class="testimonial-grid">
-                <div class="testimonial-card">
-                    <p>"CryptoVoltron has revolutionized my trading strategy. The bots are incredibly efficient and easy to use."</p>
-                    <h3>- Alex T., Crypto Trader</h3>
-                </div>
-                <div class="testimonial-card">
-                    <p>"I've seen a significant increase in my trading volume since using CryptoVoltron. Highly recommend!"</p>
-                    <h3>- Jamie L., Blockchain Enthusiast</h3>
-                </div>
-                <div class="testimonial-card">
-                    <p>"The best tool for any serious crypto trader. The automation features are top-notch."</p>
-                    <h3>- Morgan S., DeFi Investor</h3>
-                </div>
+                <div class="testimonial-card"><p>"CryptoVoltron has revolutionized my trading strategy. The bots are incredibly efficient and easy to use."</p><h3>- Alex T., Crypto Trader</h3></div>
+                <div class="testimonial-card"><p>"I've seen a significant increase in my trading volume since using CryptoVoltron. Highly recommend!"</p><h3>- Jamie L., Blockchain Enthusiast</h3></div>
+                <div class="testimonial-card"><p>"The best tool for any serious crypto trader. The automation features are top-notch."</p><h3>- Morgan S., DeFi Investor</h3></div>
             </div>
         </section>
 
@@ -162,7 +154,6 @@
         </section>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <p>© 2025 VoltronBot. All Rights Reserved.</p>
         <div class="social-links">
@@ -170,21 +161,13 @@
             <a href="https://discord.com" aria-label="Discord"><i class="fab fa-discord"></i></a>
             <a href="https://telegram.org" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
         </div>
-        <p>
-            <a href="#home">Home</a> | 
-            <a href="#features">Features</a> | 
-            <a href="#sneaker-bot">Sneaker Bot</a> | 
-            <a href="#contact">Contact</a> | 
-            <a href="#">Privacy</a>
-        </p>
+        <p><a href="#home">Home</a> | <a href="#volume-bots">Volume Bots</a> | <a href="#sneaker-bot">Sneaker Bot</a> | <a href="#contact">Contact</a> | <a href="#">Privacy</a></p>
         <p>Powered by BonzyTheCreator | <a href="mailto:support@voltronbot.com">support@voltronbot.com</a></p>
     </footer>
 
-    <!-- External Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script>
-        // Particles.js Initialization
         particlesJS("particles-js", {
             particles: {
                 number: { value: 120, density: { enable: true, value_area: 800 } },
@@ -203,23 +186,19 @@
             retina_detect: true
         });
 
-        // Sticky Navbar
         window.addEventListener('scroll', () => {
             document.querySelector('.navbar').classList.toggle('sticky', window.scrollY > 0);
         });
 
-        // Mobile Menu Toggle
         document.querySelector('.menu-toggle').addEventListener('click', () => {
             document.querySelector('.nav-links').classList.toggle('active');
         });
 
-        // Signup Form Submission
         document.getElementById('signup-form').addEventListener('submit', (e) => {
             e.preventDefault();
             alert('Account activated! Welcome to CryptoVoltron.');
         });
 
-        // Sneaker Bot Form Submission (Mockup)
         document.getElementById('sneaker-bot-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const url = document.querySelector('input[name="url"]').value;
@@ -229,14 +208,30 @@
 
             status.textContent = `Initializing Sneaker Bot... Targeting ${quantity} pair(s) of size ${size} from ${url}`;
             status.style.color = 'var(--vibe-cyan)';
+            setTimeout(() => { status.textContent = 'Scanning site... Adding to cart...'; }, 1000);
+            setTimeout(() => { status.textContent = 'Checking out... Success! Sneakers copped!'; status.style.color = 'var(--neon-lime)'; }, 3000);
+        });
 
-            setTimeout(() => {
-                status.textContent = 'Scanning site... Adding to cart...';
-            }, 1000);
-            setTimeout(() => {
-                status.textContent = 'Checking out... Success! Sneakers copped!';
-                status.style.color = 'var(--neon-lime)';
-            }, 3000);
+        // Volume Bot Functionality
+        document.querySelectorAll('.volume-bot-form').forEach(form => {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const crypto = form.querySelector('select[name="crypto"]').value;
+                const volume = form.querySelector('input[name="volume"]').value;
+                const type = form.dataset.type;
+                const status = form.nextElementSibling;
+
+                status.textContent = `Deploying ${type.replace('-', ' ')} bot for ${crypto} with ${volume} volume...`;
+                status.style.color = 'var(--vibe-cyan)';
+
+                setTimeout(() => {
+                    status.textContent = `Bot active: Monitoring ${crypto}...`;
+                }, 1000);
+                setTimeout(() => {
+                    status.textContent = `Success! ${type.replace('-', ' ')} bot deployed for ${crypto} with ${volume} volume!`;
+                    status.style.color = 'var(--neon-lime)';
+                }, 3000);
+            });
         });
     </script>
 </body>
