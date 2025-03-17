@@ -327,12 +327,25 @@ html, body {
     padding: 60px 20px;
 }
 
-.volume-bots p {
+.volume-bots p, .sneaker-bot p {
     font-family: 'Rajdhani', sans-serif;
     font-size: 20px;
     font-weight: 400;
     color: var(--metallic-silver);
+    margin: 0 0 20px;
+}
+
+.fee-note {
+    font-size: 16px;
+    color: var(--vibe-cyan);
     margin: 0 0 40px;
+}
+
+.usdc-address {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    color: var(--neon-lime);
+    text-shadow: 0 0 10px var(--neon-lime);
 }
 
 .volume-bot-grid {
@@ -425,29 +438,6 @@ html, body {
     text-shadow: 0 0 10px var(--vibe-cyan);
 }
 
-select {
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--light-haze);
-    border: 2px solid var(--vibe-cyan);
-    border-radius: 10px;
-    padding: 12px 15px;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    outline: none;
-    transition: all 0.3s ease;
-}
-
-select:focus {
-    border-color: var(--neon-lime);
-    box-shadow: 0 0 15px var(--neon-lime);
-}
-
-option {
-    background: var(--dark-void);
-    color: var(--light-haze);
-}
-
 /* Sneaker Bot Section */
 .sneaker-bot {
     text-align: center;
@@ -466,15 +456,6 @@ option {
 @keyframes sneakerGlow {
     0%, 100% { box-shadow: 0 0 30px var(--neon-lime); }
     50% { box-shadow: 0 0 60px var(--vibe-orange); }
-}
-
-.sneaker-bot p {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--light-haze);
-    margin: 0 0 40px;
-    text-shadow: 0 0 10px var(--vibe-cyan);
 }
 
 .sneaker-bot-form {
