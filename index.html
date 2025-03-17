@@ -6,7 +6,7 @@
     <meta name="description" content="VoltronBot - Volume bots for every cryptocurrency and sneaker automation. Boost your trading and copping power.">
     <meta name="keywords" content="crypto volume bots, sneaker bot, cryptocurrency trading, blockchain automation">
     <meta name="author" content="CryptoVoltron Team">
-    <title>CryptoVoltron - Unleash the Future of Trading</title>
+    <title>VoltronBot - Unleash the Future of Trading</title>
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;800&family=Orbitron:wght@500;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet" type="text/css">
 </head>
@@ -37,9 +37,10 @@
             <img src="images/hero-background.jpg" alt="Crypto Space Background">
         </div>
         <div class="content">
-            <h1>Unleash the Future of Trading</h1>
+            <h1>Unleash the Future of Trading with VoltronBot</h1>
             <p>Deploy volume bots and sneaker bots for $100 each—paid in USDC via MetaMask or Phantom.</p>
-            <a href="#signup" class="button">Launch Bots Now</a>
+            <button id="add-wallet-btn" class="button">Add Wallet</button>
+            <div id="wallet-status" class="wallet-status"></div>
         </div>
     </section>
 
@@ -92,6 +93,19 @@
                             <option value="BNB">BNB (BNB)</option>
                         </select>
                         <input type="number" name="volume" placeholder="Initial Volume" min="1" required>
+                        <button type="submit" class="button">Pay $100 & Deploy</button>
+                    </form>
+                    <div class="volume-bot-status"></div>
+                </div>
+                <div class="volume-bot-card">
+                    <div class="icon">🌐</div>
+                    <h3>Solana Raydium Volume Bot</h3>
+                    <p>Boost Solana trading volume on Raydium with precision.</p>
+                    <form class="volume-bot-form" data-type="solana-raydium-volume">
+                        <select name="crypto" required>
+                            <option value="SOL">Solana (SOL)</option>
+                        </select>
+                        <input type="number" name="volume" placeholder="Target Volume" min="1" required>
                         <button type="submit" class="button">Pay $100 & Deploy</button>
                     </form>
                     <div class="volume-bot-status"></div>
@@ -162,7 +176,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <!-- Add ethers.js and solana/web3.js for wallet interactions -->
     <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
     <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
     <script>
@@ -200,13 +213,63 @@
             alert('Account activated! Welcome to CryptoVoltron.');
         });
 
-        // Payment function supporting MetaMask and Phantom
-        async function payWithWallet(botType, crypto, volume, form, status) {
-            const ethProvider = window.ethereum; // MetaMask
-            const solProvider = window.solana; // Phantom
+        // Global wallet state
+        let connectedWallet = null;
+
+        // Truncate address for display
+        function truncateAddress(address) {
+            return `${address.slice(0, 6)}...${address.slice(-4)}`;
+        }
+
+        // Connect and sync wallet
+        async function connectWallet() {
+            const ethProvider = window.ethereum;
+            const solProvider = window.solana;
+            const status = document.getElementById('wallet-status');
 
             if (!ethProvider && !solProvider) {
-                alert('Please install MetaMask or Phantom wallet to pay with USDC');
+                status.textContent = 'Please install MetaMask or Phantom wallet.';
+                status.style.color = 'var(--vibe-pink)';
+                return;
+            }
+
+            status.textContent = 'Connecting wallet...';
+            status.style.color = 'var(--vibe-cyan)';
+
+            try {
+                if (ethProvider) {
+                    // MetaMask
+                    const provider = new ethers.providers.Web3Provider(ethProvider);
+                    await provider.send('eth_requestAccounts', []);
+                    const signer = provider.getSigner();
+                    const address = await signer.getAddress();
+                    connectedWallet = { type: 'MetaMask', address, provider };
+                    status.textContent = `Wallet connected via MetaMask: ${truncateAddress(address)}. Syncing transactions...`;
+                } else if (solProvider && solProvider.isPhantom) {
+                    // Phantom
+                    await solProvider.connect();
+                    const address = solProvider.publicKey.toString();
+                    connectedWallet = { type: 'Phantom', address, provider: solProvider };
+                    status.textContent = `Wallet connected via Phantom: ${truncateAddress(address)}. Syncing transactions...`;
+                }
+
+                setTimeout(() => {
+                    status.textContent = `Transactions synced to ${connectedWallet.type}: ${truncateAddress(connectedWallet.address)}`;
+                    status.style.color = 'var(--neon-lime)';
+                }, 1000);
+            } catch (error) {
+                status.textContent = `Error: ${error.message}`;
+                status.style.color = 'var(--vibe-pink)';
+            }
+        }
+
+        document.getElementById('add-wallet-btn').addEventListener('click', connectWallet);
+
+        // Payment function with wallet check
+        async function payWithWallet(botType, crypto, volume, form, status) {
+            if (!connectedWallet) {
+                status.textContent = 'Please connect a wallet first using "Add Wallet".';
+                status.style.color = 'var(--vibe-pink)';
                 return;
             }
 
@@ -214,30 +277,28 @@
             status.style.color = 'var(--vibe-cyan)';
 
             try {
-                if (ethProvider) {
+                let txHash;
+                if (connectedWallet.type === 'MetaMask') {
                     // MetaMask (Ethereum)
-                    const provider = new ethers.providers.Web3Provider(ethProvider);
-                    await provider.send('eth_requestAccounts', []);
+                    const provider = connectedWallet.provider;
                     const signer = provider.getSigner();
                     const usdcContract = new ethers.Contract(
                         '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC on Ethereum
-                        ['function transfer(address to, uint256 value) returns (bool)'], // Minimal ABI
+                        ['function transfer(address to, uint256 value) returns (bool)'],
                         signer
                     );
-                    const fee = ethers.utils.parseUnits('100', 6); // USDC has 6 decimals
+                    const fee = ethers.utils.parseUnits('100', 6);
                     const walletAddress = '0xYourEthereumUSDCWalletAddressHere'; // Replace securely
 
                     const tx = await usdcContract.transfer(walletAddress, fee);
                     await tx.wait();
-
-                    status.textContent = `Payment confirmed via MetaMask! Deploying ${botType}...`;
-                } else if (solProvider && solProvider.isPhantom) {
+                    txHash = tx.hash;
+                } else if (connectedWallet.type === 'Phantom') {
                     // Phantom (Solana)
-                    await solProvider.connect();
                     const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed');
                     const usdcMint = new solanaWeb3.PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'); // USDC on Solana
                     const walletAddress = new solanaWeb3.PublicKey('YourSolanaUSDCWalletAddressHere'); // Replace securely
-                    const userPublicKey = solProvider.publicKey;
+                    const userPublicKey = connectedWallet.provider.publicKey;
 
                     const transaction = new solanaWeb3.Transaction().add(
                         solanaWeb3.SystemProgram.transfer({
@@ -263,12 +324,23 @@
                         )
                     );
 
-                    const { signature } = await solProvider.signAndSendTransaction(transaction);
+                    const { signature } = await connectedWallet.provider.signAndSendTransaction(transaction);
                     await connection.confirmTransaction(signature);
-
-                    status.textContent = `Payment confirmed via Phantom! Deploying ${botType}...`;
+                    txHash = signature;
                 }
 
+                // Send transaction data to backend
+                await fetch('/api/transaction', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userWallet: connectedWallet.address,
+                        txHash,
+                        network: connectedWallet.type === 'MetaMask' ? 'Ethereum' : 'Solana'
+                    })
+                });
+
+                status.textContent = `Payment confirmed via ${connectedWallet.type}! Deploying ${botType}...`;
                 setTimeout(() => {
                     status.textContent = `Success! ${botType} deployed for ${crypto} with ${volume}!`;
                     status.style.color = 'var(--neon-lime)';
