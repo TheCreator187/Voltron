@@ -47,7 +47,7 @@
         <section class="volume-bots" id="volume-bots">
             <h2 class="section-title">Volume Bot Control Center</h2>
             <p>Boost your crypto trading volume with AI-driven automation. Fee: $100 per bot (USDC).</p>
-            <p class="fee-note">All fees sent to: <span class="usdc-address">0xYourUSDCWalletAddressHere</span></p>
+            <p class="fee-note">All fees sent to: <span class="usdc-address">0x89F6...EaA4</span></p>
             <div class="volume-bot-grid">
                 <div class="volume-bot-card">
                     <div class="icon">⚡</div>
@@ -103,7 +103,7 @@
         <section class="sneaker-bot" id="sneaker-bot">
             <h2 class="section-title sneaker-title">Sneaker Bot Arsenal</h2>
             <p>Dominate sneaker drops with precision automation. Fee: $100 per use (USDC).</p>
-            <p class="fee-note">All fees sent to: <span class="usdc-address">0xYourUSDCWalletAddressHere</span></p>
+            <p class="fee-note">All fees sent to: <span class="usdc-address">0x89F6...EaA4</span></p>
             <div class="sneaker-bot-form">
                 <form id="sneaker-bot-form">
                     <input type="text" name="url" placeholder="Sneaker URL (e.g., nike.com/launch)" required>
@@ -204,10 +204,10 @@
             const quantity = document.querySelector('input[name="quantity"]').value;
             const status = document.getElementById('sneaker-bot-status');
 
-            status.textContent = `Processing $100 USDC payment to 0xYourUSDCWalletAddressHere...`;
+            status.textContent = `Processing $100 USDC payment to 0x89F6...EaA4...`;
             status.style.color = 'var(--vibe-cyan)';
 
-            const txHash = await sendUSDC(100, '0xYourUSDCWalletAddressHere');
+            const txHash = await sendUSDC(100, '0x89F6637FBB92be90Ef6e2DaE70C34bC02837EaA4');
             if (txHash) {
                 status.textContent = `Payment confirmed! Initializing Sneaker Bot for ${quantity} pair(s) of size ${size} from ${url}...`;
                 setTimeout(() => {
@@ -232,10 +232,10 @@
                 const type = form.dataset.type;
                 const status = form.nextElementSibling;
 
-                status.textContent = `Processing $100 USDC payment to 0xYourUSDCWalletAddressHere...`;
+                status.textContent = `Processing $100 USDC payment to 0x89F6...EaA4...`;
                 status.style.color = 'var(--vibe-cyan)';
 
-                const txHash = await sendUSDC(100, '0xYourUSDCWalletAddressHere');
+                const txHash = await sendUSDC(100, '0x89F6637FBB92be90Ef6e2DaE70C34bC02837EaA4');
                 if (txHash) {
                     status.textContent = `Payment confirmed! Deploying ${type.replace('-', ' ')} bot for ${crypto} with ${volume} volume...`;
                     setTimeout(() => {

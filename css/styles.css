@@ -420,12 +420,23 @@ html, body {
     font-size: 16px;
     font-weight: 400;
     transition: all 0.3s ease;
+    appearance: none; /* Ensure custom styles apply */
 }
 
 .volume-bot-form select:focus,
 .volume-bot-form input:focus {
     border-color: var(--neon-lime);
     box-shadow: 0 0 15px var(--neon-lime);
+}
+
+.volume-bot-form select {
+    background: rgba(13, 17, 32, 0.9); /* Dark mode background */
+    color: var(--light-haze); /* Light text color */
+}
+
+.volume-bot-form select option {
+    background: rgba(13, 17, 32, 0.9); /* Dark mode background for options */
+    color: var(--light-haze); /* Light text color for options */
 }
 
 .volume-bot-status {
