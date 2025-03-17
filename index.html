@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="VoltronBot - Volume bots for every cryptocurrency. Boost your trading power with cutting-edge automation.">
-    <meta name="keywords" content="crypto volume bots, cryptocurrency trading, volume booster, blockchain automation">
+    <meta name="description" content="VoltronBot - Volume bots for every cryptocurrency and sneaker automation. Boost your trading and copping power.">
+    <meta name="keywords" content="crypto volume bots, sneaker bot, cryptocurrency trading, blockchain automation">
     <meta name="author" content="CryptoVoltron Team">
     <title>CryptoVoltron - Unleash the Future of Trading</title>
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;800&family=Orbitron:wght@500;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
@@ -28,6 +28,7 @@
         <div class="nav-links">
             <a href="#home">Home</a>
             <a href="#features">Features</a>
+            <a href="#sneaker-bot" class="highlight-link">Sneaker Bot</a>
             <a href="#signup">Sign Up</a>
             <a href="#contact">Contact</a>
         </div>
@@ -40,7 +41,7 @@
         </div>
         <div class="content">
             <h1>Unleash the Future of Trading</h1>
-            <p>Deploy volume bots across every cryptocurrency—amplify trades, surge liquidity, and dominate the blockchain with precision automation.</p>
+            <p>Deploy volume bots across every cryptocurrency and snag limited-edition sneakers with precision automation.</p>
             <a href="#signup" class="button">Launch Bots Now</a>
         </div>
     </section>
@@ -66,8 +67,25 @@
                     <p>Plug in, power up—intuitive dashboard, real-time control, zero downtime.</p>
                 </div>
             </div>
+        </section>
 
-            <!-- Supported Cryptocurrencies -->
+        <!-- Sneaker Bot Section (Moved Up) -->
+        <section class="sneaker-bot" id="sneaker-bot">
+            <h2 class="section-title sneaker-title">Sneaker Bot Arsenal</h2>
+            <p>Dominate sneaker drops with precision automation—cop exclusives from Nike, Adidas, and more.</p>
+            <div class="sneaker-bot-form">
+                <form id="sneaker-bot-form">
+                    <input type="text" name="url" placeholder="Sneaker URL (e.g., nike.com/launch)" required>
+                    <input type="text" name="size" placeholder="Size (e.g., 10)" required>
+                    <input type="number" name="quantity" placeholder="Quantity" min="1" max="10" required>
+                    <button type="submit" class="button sneaker-button">Cop Sneakers</button>
+                </form>
+                <div id="sneaker-bot-status" class="status-message"></div>
+            </div>
+        </section>
+
+        <!-- Supported Cryptocurrencies -->
+        <section class="features">
             <h2 class="section-title crypto-title">Supported Cryptocurrencies</h2>
             <div class="crypto-grid">
                 <div class="crypto-item">
@@ -136,8 +154,8 @@
         <!-- Signup Section -->
         <section class="signup" id="signup">
             <h2 class="section-title">Join the Crypto Revolution</h2>
-            <p>Sign up to harness the ultimate volume bot arsenal—your edge in the crypto frontier.</p>
-            <form>
+            <p>Sign up to harness the ultimate volume bot and sneaker bot arsenal—your edge in the frontier.</p>
+            <form id="signup-form">
                 <input type="email" name="email" placeholder="Enter Your Email" required>
                 <button type="submit" class="button">Activate Your Account</button>
             </form>
@@ -155,6 +173,7 @@
         <p>
             <a href="#home">Home</a> | 
             <a href="#features">Features</a> | 
+            <a href="#sneaker-bot">Sneaker Bot</a> | 
             <a href="#contact">Contact</a> | 
             <a href="#">Privacy</a>
         </p>
@@ -194,10 +213,30 @@
             document.querySelector('.nav-links').classList.toggle('active');
         });
 
-        // Form Submission
-        document.querySelector('form').addEventListener('submit', (e) => {
+        // Signup Form Submission
+        document.getElementById('signup-form').addEventListener('submit', (e) => {
             e.preventDefault();
             alert('Account activated! Welcome to CryptoVoltron.');
+        });
+
+        // Sneaker Bot Form Submission (Mockup)
+        document.getElementById('sneaker-bot-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const url = document.querySelector('input[name="url"]').value;
+            const size = document.querySelector('input[name="size"]').value;
+            const quantity = document.querySelector('input[name="quantity"]').value;
+            const status = document.getElementById('sneaker-bot-status');
+
+            status.textContent = `Initializing Sneaker Bot... Targeting ${quantity} pair(s) of size ${size} from ${url}`;
+            status.style.color = 'var(--vibe-cyan)';
+
+            setTimeout(() => {
+                status.textContent = 'Scanning site... Adding to cart...';
+            }, 1000);
+            setTimeout(() => {
+                status.textContent = 'Checking out... Success! Sneakers copped!';
+                status.style.color = 'var(--neon-lime)';
+            }, 3000);
         });
     </script>
 </body>
