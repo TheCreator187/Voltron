@@ -736,6 +736,7 @@ html, body {
     }
     .hero .content {
         padding: 30px;
+        margin-top: 50px; /* Adjust the value as needed */
     }
     .hero h1 {
         font-size: 40px;
