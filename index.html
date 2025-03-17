@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=5.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="description" content="VoltronBot - Volume bots for every cryptocurrency and sneaker automation. Boost your trading and copping power.">
     <meta name="keywords" content="crypto volume bots, sneaker bot, cryptocurrency trading, blockchain automation">
     <meta name="author" content="CryptoVoltron Team">
@@ -259,7 +259,7 @@
 
         async function payWithWallet(botType, crypto, volume, form, status) {
             if (!connectedWallet) {
-                status.textContent = 'Please connect a wallet first using "Add Wallet".';
+                status.textContent = 'Please connect a wallet first using "Connect Wallet".';
                 status.style.color = 'var(--vibe-pink)';
                 return;
             }
@@ -277,7 +277,7 @@
                     const provider = connectedWallet.provider;
                     const signer = provider.getSigner();
                     const usdcContract = new ethers.Contract(
-                        '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC on Ethereum
+                        '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
                         ['function transfer(address to, uint256 value) returns (bool)'],
                         signer
                     );
@@ -312,7 +312,6 @@
                     txHash = signature;
                 }
 
-                // Verify payment with backend
                 status.textContent = 'Verifying payment...';
                 const response = await fetch('/verify-payment', {
                     method: 'POST',
@@ -343,14 +342,13 @@
             }
         }
 
-        // Helper function to create token account if it doesn’t exist (Solana)
         async function createTokenAccount(connection, payer, mint, owner) {
             const tokenAccount = solanaWeb3.Keypair.generate();
             const tx = new solanaWeb3.Transaction().add(
                 solanaWeb3.SystemProgram.createAccount({
                     fromPubkey: payer,
                     newAccountPubkey: tokenAccount.publicKey,
-                    space: 165, // SPL token account size
+                    space: 165,
                     lamports: await connection.getMinimumBalanceForRentExemption(165),
                     programId: solanaWeb3.TOKEN_PROGRAM_ID,
                 }),
