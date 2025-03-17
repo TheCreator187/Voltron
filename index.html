@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=5.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="description" content="VoltronBot - Volume bots for every cryptocurrency and sneaker automation. Boost your trading and copping power.">
     <meta name="keywords" content="crypto volume bots, sneaker bot, cryptocurrency trading, blockchain automation">
     <meta name="author" content="CryptoVoltron Team">
@@ -182,6 +182,7 @@
         const { ethers } = window;
         const { solanaWeb3 } = window;
 
+        // Particle.js setup
         particlesJS("particles-js", {
             particles: {
                 number: { value: 120, density: { enable: true, value_area: 800 } },
@@ -210,18 +211,15 @@
 
         document.getElementById('signup-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            alert('Account activated! Welcome to CryptoVoltron.');
+            alert('Account activated! Welcome to VoltronBot.');
         });
 
-        // Global wallet state
         let connectedWallet = null;
 
-        // Truncate address for display
         function truncateAddress(address) {
             return `${address.slice(0, 6)}...${address.slice(-4)}`;
         }
 
-        // Connect and sync wallet
         async function connectWallet() {
             const ethProvider = window.ethereum;
             const solProvider = window.solana;
@@ -238,25 +236,19 @@
 
             try {
                 if (ethProvider) {
-                    // MetaMask
                     const provider = new ethers.providers.Web3Provider(ethProvider);
                     await provider.send('eth_requestAccounts', []);
                     const signer = provider.getSigner();
                     const address = await signer.getAddress();
                     connectedWallet = { type: 'MetaMask', address, provider };
-                    status.textContent = `Wallet connected via MetaMask: ${truncateAddress(address)}. Syncing transactions...`;
+                    status.textContent = `Wallet connected via MetaMask: ${truncateAddress(address)}`;
                 } else if (solProvider && solProvider.isPhantom) {
-                    // Phantom
                     await solProvider.connect();
                     const address = solProvider.publicKey.toString();
                     connectedWallet = { type: 'Phantom', address, provider: solProvider };
-                    status.textContent = `Wallet connected via Phantom: ${truncateAddress(address)}. Syncing transactions...`;
+                    status.textContent = `Wallet connected via Phantom: ${truncateAddress(address)}`;
                 }
-
-                setTimeout(() => {
-                    status.textContent = `Transactions synced to ${connectedWallet.type}: ${truncateAddress(connectedWallet.address)}`;
-                    status.style.color = 'var(--neon-lime)';
-                }, 1000);
+                status.style.color = 'var(--neon-lime)';
             } catch (error) {
                 status.textContent = `Error: ${error.message}`;
                 status.style.color = 'var(--vibe-pink)';
@@ -265,7 +257,6 @@
 
         document.getElementById('add-wallet-btn').addEventListener('click', connectWallet);
 
-        // Payment function with wallet check
         async function payWithWallet(botType, crypto, volume, form, status) {
             if (!connectedWallet) {
                 status.textContent = 'Please connect a wallet first using "Add Wallet".';
@@ -273,13 +264,16 @@
                 return;
             }
 
-            status.textContent = 'Awaiting $100 USDC payment...';
+            status.textContent = 'Initiating $100 USDC payment...';
             status.style.color = 'var(--vibe-cyan)';
 
             try {
                 let txHash;
+                const fee = connectedWallet.type === 'MetaMask' ? ethers.utils.parseUnits('100', 6) : 100 * 10 ** 6;
+                const ethWalletAddress = 'YOUR_ETHEREUM_USDC_WALLET'; // Replace in backend
+                const solWalletAddress = 'YOUR_SOLANA_USDC_WALLET';   // Replace in backend
+
                 if (connectedWallet.type === 'MetaMask') {
-                    // MetaMask (Ethereum)
                     const provider = connectedWallet.provider;
                     const signer = provider.getSigner();
                     const usdcContract = new ethers.Contract(
@@ -287,37 +281,25 @@
                         ['function transfer(address to, uint256 value) returns (bool)'],
                         signer
                     );
-                    const fee = ethers.utils.parseUnits('100', 6);
-                    const walletAddress = '0xYourEthereumUSDCWalletAddressHere'; // Replace securely
-
-                    const tx = await usdcContract.transfer(walletAddress, fee);
+                    const tx = await usdcContract.transfer(ethWalletAddress, fee);
+                    status.textContent = 'Awaiting transaction confirmation...';
                     await tx.wait();
                     txHash = tx.hash;
                 } else if (connectedWallet.type === 'Phantom') {
-                    // Phantom (Solana)
-                    const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed');
-                    const usdcMint = new solanaWeb3.PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'); // USDC on Solana
-                    const walletAddress = new solanaWeb3.PublicKey('YourSolanaUSDCWalletAddressHere'); // Replace securely
-                    const userPublicKey = connectedWallet.provider.publicKey;
+                    const connection = new solanaWeb3.Connection('https://api.mainnet-beta.solana.fm', 'confirmed');
+                    const usdcMint = new solanaWeb3.PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
+                    const walletAddress = new solanaWeb3.PublicKey(solWalletAddress);
+                    const userPublicKey = new solanaWeb3.PublicKey(connectedWallet.address);
 
-                    const transaction = new solanaWeb3.Transaction().add(
-                        solanaWeb3.SystemProgram.transfer({
-                            fromPubkey: userPublicKey,
-                            toPubkey: walletAddress,
-                            lamports: 0, // We'll use SPL token transfer instead
-                        })
-                    );
-
-                    // SPL Token Transfer (USDC)
-                    const tokenAccountFrom = await connection.getTokenAccountsByOwner(userPublicKey, { mint: usdcMint });
-                    const tokenAccountTo = await connection.getTokenAccountsByOwner(walletAddress, { mint: usdcMint });
-                    const fee = 100 * 10 ** 6; // USDC has 6 decimals
+                    const transaction = new solanaWeb3.Transaction();
+                    const tokenAccountFrom = (await connection.getTokenAccountsByOwner(userPublicKey, { mint: usdcMint })).value[0].pubkey;
+                    const tokenAccountTo = (await connection.getTokenAccountsByOwner(walletAddress, { mint: usdcMint })).value[0].pubkey || (await createTokenAccount(connection, userPublicKey, usdcMint, walletAddress));
 
                     transaction.add(
                         solanaWeb3.Token.createTransferInstruction(
                             solanaWeb3.TOKEN_PROGRAM_ID,
-                            tokenAccountFrom.value[0].pubkey,
-                            tokenAccountTo.value[0].pubkey,
+                            tokenAccountFrom,
+                            tokenAccountTo,
                             userPublicKey,
                             [],
                             fee
@@ -325,33 +307,64 @@
                     );
 
                     const { signature } = await connectedWallet.provider.signAndSendTransaction(transaction);
+                    status.textContent = 'Awaiting transaction confirmation...';
                     await connection.confirmTransaction(signature);
                     txHash = signature;
                 }
 
-                // Send transaction data to backend
-                await fetch('/api/transaction', {
+                // Verify payment with backend
+                status.textContent = 'Verifying payment...';
+                const response = await fetch('/verify-payment', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        userWallet: connectedWallet.address,
+                        walletType: connectedWallet.type,
                         txHash,
-                        network: connectedWallet.type === 'MetaMask' ? 'Ethereum' : 'Solana'
+                        botType,
+                        crypto,
+                        volume,
+                        userAddress: connectedWallet.address
                     })
                 });
+                const result = await response.json();
 
-                status.textContent = `Payment confirmed via ${connectedWallet.type}! Deploying ${botType}...`;
-                setTimeout(() => {
-                    status.textContent = `Success! ${botType} deployed for ${crypto} with ${volume}!`;
-                    status.style.color = 'var(--neon-lime)';
-                }, 2000);
+                if (result.success) {
+                    status.textContent = `Payment confirmed! Deploying ${botType}...`;
+                    setTimeout(() => {
+                        status.textContent = result.message;
+                        status.style.color = 'var(--neon-lime)';
+                    }, 2000);
+                } else {
+                    throw new Error(result.message);
+                }
             } catch (error) {
                 status.textContent = `Error: ${error.message}`;
                 status.style.color = 'var(--vibe-pink)';
             }
         }
 
-        // Volume Bots with Fee
+        // Helper function to create token account if it doesn’t exist (Solana)
+        async function createTokenAccount(connection, payer, mint, owner) {
+            const tokenAccount = solanaWeb3.Keypair.generate();
+            const tx = new solanaWeb3.Transaction().add(
+                solanaWeb3.SystemProgram.createAccount({
+                    fromPubkey: payer,
+                    newAccountPubkey: tokenAccount.publicKey,
+                    space: 165, // SPL token account size
+                    lamports: await connection.getMinimumBalanceForRentExemption(165),
+                    programId: solanaWeb3.TOKEN_PROGRAM_ID,
+                }),
+                solanaWeb3.Token.createInitAccountInstruction(
+                    solanaWeb3.TOKEN_PROGRAM_ID,
+                    mint,
+                    tokenAccount.publicKey,
+                    owner
+                )
+            );
+            await connectedWallet.provider.signAndSendTransaction(tx);
+            return tokenAccount.publicKey;
+        }
+
         document.querySelectorAll('.volume-bot-form').forEach(form => {
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -363,7 +376,6 @@
             });
         });
 
-        // Sneaker Bot with Fee
         document.getElementById('sneaker-bot-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const url = document.querySelector('input[name="url"]').value;
