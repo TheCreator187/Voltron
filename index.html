@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=5.0, user-scalable=yes">
     <meta name="description" content="VoltronBot - Volume bots for every cryptocurrency and sneaker automation. Boost your trading and copping power.">
     <meta name="keywords" content="crypto volume bots, sneaker bot, cryptocurrency trading, blockchain automation">
     <meta name="author" content="CryptoVoltron Team">
@@ -52,7 +52,7 @@
                 <div class="volume-bot-card">
                     <div class="icon">⚡</div>
                     <h3>Universal Chain Sync</h3>
-                    <p>Sync bots across all chains.</p>
+                    <p>Sync bots across all chains. This bot ensures that your trades are synchronized across multiple blockchain networks, providing a seamless trading experience without missing any opportunities.</p>
                     <form class="volume-bot-form" data-type="chain-sync">
                         <select name="crypto" required>
                             <option value="">Select Crypto</option>
@@ -68,7 +68,7 @@
                 <div class="volume-bot-card">
                     <div class="icon">📈</div>
                     <h3>Hyper Volume Boost</h3>
-                    <p>Spike volume with AI precision.</p>
+                    <p>Spike volume with AI precision. Use this bot to create significant volume spikes in your chosen cryptocurrency, leveraging advanced AI algorithms to predict and capitalize on market movements.</p>
                     <form class="volume-bot-form" data-type="volume-boost">
                         <select name="crypto" required>
                             <option value="">Select Crypto</option>
@@ -84,7 +84,7 @@
                 <div class="volume-bot-card">
                     <div class="icon">🚀</div>
                     <h3>Instant Deployment</h3>
-                    <p>Launch bots in real-time.</p>
+                    <p>Launch bots in real-time. Deploy this bot for immediate trading actions, ensuring you can react to market changes instantly without any delay.</p>
                     <form class="volume-bot-form" data-type="instant-deploy">
                         <select name="crypto" required>
                             <option value="">Select Crypto</option>
@@ -100,7 +100,7 @@
                 <div class="volume-bot-card">
                     <div class="icon">🌐</div>
                     <h3>Solana Raydium Volume Bot</h3>
-                    <p>Boost Solana trading volume on Raydium with precision.</p>
+                    <p>Boost Solana trading volume on Raydium with precision. Specifically designed for Solana traders, this bot enhances your trading volume on the Raydium platform, utilizing precise algorithms for optimal results.</p>
                     <form class="volume-bot-form" data-type="solana-raydium-volume">
                         <select name="crypto" required>
                             <option value="SOL">Solana (SOL)</option>
@@ -115,7 +115,7 @@
 
         <section class="sneaker-bot" id="sneaker-bot">
             <h2 class="section-title sneaker-title">Sneaker Bot Arsenal</h2>
-            <p>Dominate sneaker drops with precision automation. Fee: $100 per use (USDC).</p>
+            <p>Dominate sneaker drops with precision automation. Fee: $100 per use (USDC). Use this bot to secure the latest sneaker releases from popular brands, ensuring you never miss out on limited-edition drops.</p>
             <div class="sneaker-bot-form">
                 <form id="sneaker-bot-form">
                     <input type="text" name="url" placeholder="Sneaker URL (e.g., nike.com/launch)" required>
@@ -293,95 +293,4 @@
 
                     const transaction = new solanaWeb3.Transaction();
                     const tokenAccountFrom = (await connection.getTokenAccountsByOwner(userPublicKey, { mint: usdcMint })).value[0].pubkey;
-                    const tokenAccountTo = (await connection.getTokenAccountsByOwner(walletAddress, { mint: usdcMint })).value[0].pubkey || (await createTokenAccount(connection, userPublicKey, usdcMint, walletAddress));
-
-                    transaction.add(
-                        solanaWeb3.Token.createTransferInstruction(
-                            solanaWeb3.TOKEN_PROGRAM_ID,
-                            tokenAccountFrom,
-                            tokenAccountTo,
-                            userPublicKey,
-                            [],
-                            fee
-                        )
-                    );
-
-                    const { signature } = await connectedWallet.provider.signAndSendTransaction(transaction);
-                    status.textContent = 'Awaiting transaction confirmation...';
-                    await connection.confirmTransaction(signature);
-                    txHash = signature;
-                }
-
-                status.textContent = 'Verifying payment...';
-                const response = await fetch('/verify-payment', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        walletType: connectedWallet.type,
-                        txHash,
-                        botType,
-                        crypto,
-                        volume,
-                        userAddress: connectedWallet.address
-                    })
-                });
-                const result = await response.json();
-
-                if (result.success) {
-                    status.textContent = `Payment confirmed! Deploying ${botType}...`;
-                    setTimeout(() => {
-                        status.textContent = result.message;
-                        status.style.color = 'var(--neon-lime)';
-                    }, 2000);
-                } else {
-                    throw new Error(result.message);
-                }
-            } catch (error) {
-                status.textContent = `Error: ${error.message}`;
-                status.style.color = 'var(--vibe-pink)';
-            }
-        }
-
-        async function createTokenAccount(connection, payer, mint, owner) {
-            const tokenAccount = solanaWeb3.Keypair.generate();
-            const tx = new solanaWeb3.Transaction().add(
-                solanaWeb3.SystemProgram.createAccount({
-                    fromPubkey: payer,
-                    newAccountPubkey: tokenAccount.publicKey,
-                    space: 165,
-                    lamports: await connection.getMinimumBalanceForRentExemption(165),
-                    programId: solanaWeb3.TOKEN_PROGRAM_ID,
-                }),
-                solanaWeb3.Token.createInitAccountInstruction(
-                    solanaWeb3.TOKEN_PROGRAM_ID,
-                    mint,
-                    tokenAccount.publicKey,
-                    owner
-                )
-            );
-            await connectedWallet.provider.signAndSendTransaction(tx);
-            return tokenAccount.publicKey;
-        }
-
-        document.querySelectorAll('.volume-bot-form').forEach(form => {
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const crypto = form.querySelector('select[name="crypto"]').value;
-                const volume = form.querySelector('input[name="volume"]').value;
-                const type = form.dataset.type;
-                const status = form.nextElementSibling;
-                await payWithWallet(type.replace('-', ' '), crypto, volume, form, status);
-            });
-        });
-
-        document.getElementById('sneaker-bot-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const url = document.querySelector('input[name="url"]').value;
-            const size = document.querySelector('input[name="size"]').value;
-            const quantity = document.querySelector('input[name="quantity"]').value;
-            const status = document.getElementById('sneaker-bot-status');
-            await payWithWallet('Sneaker Bot', url, `${size}-${quantity}`, e.target, status);
-        });
-    </script>
-</body>
-</html>
+                    const tokenAccountTo = (await connection.getTokenAccountsByOwner(walletAddress, { mint: usdcMint })).value[0].pubkey || (await createTokenAccount(connection,
