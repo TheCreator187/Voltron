@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=5.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="VoltronBot - Volume bots for every cryptocurrency and sneaker automation. Boost your trading and copping power.">
     <meta name="keywords" content="crypto volume bots, sneaker bot, cryptocurrency trading, blockchain automation">
     <meta name="author" content="CryptoVoltron Team">
@@ -293,4 +293,10 @@
 
                     const transaction = new solanaWeb3.Transaction();
                     const tokenAccountFrom = (await connection.getTokenAccountsByOwner(userPublicKey, { mint: usdcMint })).value[0].pubkey;
-                    const tokenAccountTo = (await connection.getTokenAccountsByOwner(walletAddress, { mint: usdcMint })).value[0].pubkey || (await createTokenAccount(connection,
+                                const tokenAccountTo = (await connection.getTokenAccountsByOwner(walletAddress, { mint: usdcMint })).value[0].pubkey || (await createTokenAccount(connection, walletAddress, usdcMint));
+                            }
+                        } catch (error) {
+                            status.textContent = `Payment failed: ${error.message}`;
+                            status.style.color = 'var(--vibe-pink)';
+                        }
+                    }
