@@ -570,3 +570,26 @@ html, body {
     margin: 0 0 10px;
     line-height: 1.4;
 }
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.social-link {
+    font-size: 24px;
+    color: var(--vibe-cyan);
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-link:hover {
+    color: var(--neon-lime);
+    transform: scale(1.2);
+}
+
+.social-link i {
+    display: inline-block;
+    text-shadow: 0 0 10px var(--vibe-cyan);
+}
