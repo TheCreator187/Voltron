@@ -1,5 +1,4 @@
 const express = require('express');
-const { ethers } = require('ethers');
 const { Connection, PublicKey, TOKEN_PROGRAM_ID } = require('@solana/web3.js');
 const puppeteer = require('puppeteer');
 const app = express();
@@ -8,15 +7,15 @@ const port = 3000;
 app.use(express.json());
 app.use(express.static('public'));
 
-// Ethereum setup
-const ethProvider = new ethers.providers.JsonRpcProvider('https://mainnet.infura.io/v3/YOUR_INFURA_KEY');
-const ethUsdcAddress = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48';
-const ethWalletAddress = 'YOUR_ETHEREUM_USDC_WALLET'; // Your Ethereum USDC wallet
-
 // Solana setup
 const solConnection = new Connection('https://api.mainnet-beta.solana.fm', 'confirmed');
 const solUsdcMint = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
-const solWalletAddress = new PublicKey('YOUR_SOLANA_USDC_WALLET'); // Your Solana USDC wallet
+const solWalletAddress = new PublicKey('CdzZ2CVwvbWp19dtpVrN7L1qVJYCSv7p8Fb1xjhnWxxa'); // Updated Solana USDC wallet address
+
+// Validate Solana wallet address
+if (solWalletAddress.toString() === 'YOUR_SOLANA_USDC_WALLET') {
+    throw new Error('Please replace YOUR_SOLANA_USDC_WALLET with a valid base58-encoded Solana wallet address in server.js');
+}
 
 // Bot logic (mocked for now)
 async function universalChainSync(crypto, volume) {
@@ -49,34 +48,53 @@ async function sneakerBot(url, size, quantity) {
     return `Sneaker Bot copped ${quantity} sneakers of size ${size} from ${url}`;
 }
 
+async function payWithSolana(userPublicKey, botType, volume) {
+    const fee = 100 * 10 ** 6; // 100 USDC in lamports
+    const status = `Initiating payment for ${botType} bot with ${volume} volume...`;
+    console.log(status);
+
+    try {
+        const connection = new Connection('https://api.mainnet-beta.solana.fm', 'confirmed');
+        const usdcMint = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
+        const userPublicKeyObj = new PublicKey(userPublicKey);
+
+        // Fetch user's USDC token account
+        const tokenAccounts = await connection.getTokenAccountsByOwner(userPublicKeyObj, { mint: usdcMint });
+        if (tokenAccounts.value.length === 0) {
+            throw new Error('No USDC token account found for the user');
+        }
+
+        const userTokenAccount = tokenAccounts.value[0].pubkey;
+
+        // Create transaction
+        const transaction = new solanaWeb3.Transaction().add(
+            solanaWeb3.Token.createTransferInstruction(
+                TOKEN_PROGRAM_ID,
+                userTokenAccount,
+                solWalletAddress,
+                userPublicKeyObj,
+                [],
+                fee
+            )
+        );
+
+        // Send transaction
+        const signature = await solanaWeb3.sendAndConfirmTransaction(connection, transaction, [userPublicKeyObj]);
+        console.log(`Payment successful with signature: ${signature}`);
+        return `Payment successful for ${botType} bot with ${volume} volume. Transaction signature: ${signature}`;
+    } catch (error) {
+        console.error('Payment failed:', error);
+        throw new Error(`Payment failed: ${error.message}`);
+    }
+}
+
 // Verify payment endpoint
 app.post('/verify-payment', async (req, res) => {
     const { walletType, txHash, botType, crypto, volume, userAddress } = req.body;
-    const feeExpected = walletType === 'MetaMask' ? ethers.utils.parseUnits('100', 6) : 100 * 10 ** 6;
+    const feeExpected = 100 * 10 ** 6;
 
     try {
-        if (walletType === 'MetaMask') {
-            const tx = await ethProvider.getTransaction(txHash);
-            if (!tx) throw new Error('Transaction not found');
-
-            const receipt = await ethProvider.waitForTransaction(txHash);
-            if (receipt.status !== 1) throw new Error('Transaction failed');
-
-            // Verify USDC transfer
-            const usdcInterface = new ethers.utils.Interface(['event Transfer(address indexed from, address indexed to, uint256 value)']);
-            const logs = receipt.logs.map(log => {
-                try { return usdcInterface.parseLog(log); } catch { return null; }
-            }).filter(log => log && log.name === 'Transfer');
-
-            const paymentLog = logs.find(log => 
-                log.args.from.toLowerCase() === userAddress.toLowerCase() &&
-                log.args.to.toLowerCase() === ethWalletAddress.toLowerCase()
-            );
-
-            if (!paymentLog || paymentLog.args.value.lt(feeExpected)) {
-                throw new Error('Insufficient or incorrect USDC payment');
-            }
-        } else if (walletType === 'Phantom') {
+        if (walletType === 'Phantom') {
             const tx = await solConnection.getParsedTransaction(txHash, { maxSupportedTransactionVersion: 0 });
             if (!tx || tx.meta.err) throw new Error('Transaction failed');
 
@@ -93,6 +111,8 @@ app.post('/verify-payment', async (req, res) => {
             if (!transfer || transfer.parsed.info.amount < feeExpected) {
                 throw new Error('Insufficient or incorrect USDC payment');
             }
+        } else {
+            throw new Error('Unsupported wallet type');
         }
 
         // Payment verified, deploy bot

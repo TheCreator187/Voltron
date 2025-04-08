@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=width-device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="VoltronBot - Volume bots for every cryptocurrency and sneaker automation. Boost your trading and copping power.">
     <meta name="keywords" content="crypto volume bots, sneaker bot, cryptocurrency trading, blockchain automation">
     <meta name="author" content="CryptoVoltron Team">
     <title>VoltronBot - Unleash the Future of Trading</title>
-    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;800&family=Orbitron:wght@500;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;800&family=Orbitron:wght@500;700&family=Rajdhani:wght@ словами400;600&display=swap" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -32,51 +32,14 @@
         </div>
     </nav>
 
-    <script>
-        const menuToggle = document.querySelector('.menu-toggle');
-        const navLinks = document.querySelector('.nav-links');
-
-        // Ensure the menu is hidden initially
-        document.addEventListener('DOMContentLoaded', () => {
-            navLinks.classList.remove('active');
-        });
-
-        // Toggle the menu visibility when the menu button is clicked
-        menuToggle.addEventListener('click', (event) => {
-            event.stopPropagation(); // Prevent click from propagating to document
-            navLinks.classList.toggle('active');
-        });
-
-        // Close the menu when clicking outside of it
-        document.addEventListener('click', (event) => {
-            if (!menuToggle.contains(event.target) && !navLinks.contains(event.target)) {
-                navLinks.classList.remove('active');
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('DOM fully loaded and parsed'); // Debug log
-            const walletButton = document.getElementById('add-wallet-btn');
-            if (!walletButton) {
-                console.error('Connect Wallet button not found'); // Debug log
-                return;
-            }
-
-            walletButton.addEventListener('click', () => {
-                console.log('Connect Wallet button clicked'); // Debug log
-                connectWallet();
-            });
-        });
-    </script>
-
     <section class="hero" id="home">
         <div class="hero-background">
             <img src="images/space.jpg" alt="Crypto Space Background">
         </div>
         <div class="content">
             <h1>Empower Your Trading with VoltronBot</h1>
-            <p>Deploy advanced volume and sneaker bots for just $100 each—payable in USDC via MetaMask or Phantom.</p>
-            <button id="add-wallet-btn" class="button">Connect Wallet</button>
+            <p>Deploy advanced volume and sneaker bots for just 1 SOL each—payable via Phantom wallet.</p>
+            <button id="add-wallet-btn" class="button">Connect Phantom Wallet</button>
             <div id="wallet-status" class="wallet-status"></div>
         </div>
     </section>
@@ -84,7 +47,7 @@
     <main class="main">
         <section class="volume-bots" id="volume-bots">
             <h2 class="section-title">Volume Bot Control Center</h2>
-            <p>Boost your crypto trading volume with AI-driven automation. Fee: $100 per bot (USDC).</p>
+            <p>Boost your crypto trading volume with AI-driven automation. Fee: 1 SOL per bot.</p>
             <div class="volume-bot-grid">
                 <div class="volume-bot-card">
                     <div class="icon">⚡</div>
@@ -98,7 +61,7 @@
                             <option value="BNB">BNB (BNB)</option>
                         </select>
                         <input type="number" name="volume" placeholder="Target Volume" min="1" required>
-                        <button type="submit" class="button">Pay $100 & Deploy</button>
+                        <button type="submit" class="button">Pay 1 SOL & Deploy</button>
                     </form>
                     <div class="volume-bot-status"></div>
                 </div>
@@ -114,7 +77,7 @@
                             <option value="BNB">BNB (BNB)</option>
                         </select>
                         <input type="number" name="volume" placeholder="Boost Amount" min="1" required>
-                        <button type="submit" class="button">Pay $100 & Deploy</button>
+                        <button type="submit" class="button">Pay 1 SOL & Deploy</button>
                     </form>
                     <div class="volume-bot-status"></div>
                 </div>
@@ -130,7 +93,7 @@
                             <option value="BNB">BNB (BNB)</option>
                         </select>
                         <input type="number" name="volume" placeholder="Initial Volume" min="1" required>
-                        <button type="submit" class="button">Pay $100 & Deploy</button>
+                        <button type="submit" class="button">Pay 1 SOL & Deploy</button>
                     </form>
                     <div class="volume-bot-status"></div>
                 </div>
@@ -143,7 +106,7 @@
                             <option value="SOL">Solana (SOL)</option>
                         </select>
                         <input type="number" name="volume" placeholder="Target Volume" min="1" required>
-                        <button type="submit" class="button">Pay $100 & Deploy</button>
+                        <button type="submit" class="button">Pay 1 SOL & Deploy</button>
                     </form>
                     <div class="volume-bot-status"></div>
                 </div>
@@ -152,13 +115,13 @@
 
         <section class="sneaker-bot" id="sneaker-bot">
             <h2 class="section-title sneaker-title">Sneaker Bot Arsenal</h2>
-            <p>Dominate sneaker drops with precision automation. Fee: $100 per use (USDC). Use this bot to secure the latest sneaker releases from popular brands, ensuring you never miss out on limited-edition drops.</p>
+            <p>Dominate sneaker drops with precision automation. Fee: 1 SOL per use.</p>
             <div class="sneaker-bot-form">
                 <form id="sneaker-bot-form">
                     <input type="text" name="url" placeholder="Sneaker URL (e.g., nike.com/launch)" required>
                     <input type="text" name="size" placeholder="Size (e.g., 10)" required>
                     <input type="number" name="quantity" placeholder="Quantity" min="1" max="10" required>
-                    <button type="submit" class="button sneaker-button">Pay $100 & Cop Sneakers</button>
+                    <button type="submit" class="button sneaker-button">Pay 1 SOL & Cop Sneakers</button>
                 </form>
                 <div id="sneaker-bot-status" class="status-message"></div>
             </div>
@@ -185,7 +148,7 @@
             <h2 class="section-title">What Our Users Say</h2>
             <div class="testimonial-grid">
                 <div class="testimonial-card"><p>"CryptoVoltron has revolutionized my trading strategy. Worth every penny!"</p><h3>- Alex T., Crypto Trader</h3></div>
-                <div class="testimonial-card"><p>"The volume bots are a game-changer. $100 well spent!"</p><h3>- Jamie L., Blockchain Enthusiast</h3></div>
+                <div class="testimonial-card"><p>"The volume bots are a game-changer. 1 SOL well spent!"</p><h3>- Jamie L., Blockchain Enthusiast</h3></div>
                 <div class="testimonial-card"><p>"Top-notch automation for both crypto and sneakers. Fees are fair."</p><h3>- Morgan S., DeFi Investor</h3></div>
             </div>
         </section>
@@ -193,7 +156,7 @@
         <section class="signup modern-signup" id="signup">
             <div class="signup-content">
                 <h2 class="section-title">Join the Revolution</h2>
-                <p class="signup-description">Gain access to cutting-edge volume and sneaker bots for just $100 per bot. Payments accepted in USDC via MetaMask or Phantom.</p>
+                <p class="signup-description">Gain access to cutting-edge volume and sneaker bots for just 1 SOL per bot. Payments accepted via Phantom wallet.</p>
                 <form id="signup-form" class="signup-form">
                     <div class="form-group">
                         <input type="email" name="email" class="form-input" placeholder="Enter Your Email" required>
@@ -215,155 +178,197 @@
         </div>
     </footer>
 
+    <!-- External Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
     <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+
     <script>
-        const { ethers } = window;
-        const { solanaWeb3 } = window;
+        window.addEventListener('load', () => {
+            console.log('Window loaded. Checking library availability...');
+            console.log('solanaWeb3:', typeof solanaWeb3 !== 'undefined' ? 'Loaded' : 'Not Loaded');
 
-        // Particle.js setup
-        particlesJS("particles-js", {
-            particles: {
-                number: { value: 120, density: { enable: true, value_area: 800 } },
-                color: { value: "#39ff14" },
-                shape: { type: "polygon", polygon: { nb_sides: 6 } },
-                opacity: { value: 0.7, random: true },
-                size: { value: 3, random: true },
-                line_linked: { enable: true, distance: 100, color: "#ff1a8c", opacity: 0.6, width: 1.2 },
-                move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
-            },
-            interactivity: {
-                detect_on: "canvas",
-                events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: true, mode: "push" }, resize: true },
-                modes: { grab: { distance: 150, line_linked: { opacity: 0.8 } }, push: { particles_nb: 4 } }
-            },
-            retina_detect: true
-        });
+            const { solanaWeb3 } = window;
 
-        window.addEventListener('scroll', () => {
-            document.querySelector('.navbar').classList.toggle('sticky', window.scrollY > 0);
-        });
+            // Particle.js setup
+            if (typeof particlesJS !== 'undefined') {
+                particlesJS("particles-js", {
+                    particles: {
+                        number: { value: 120, density: { enable: true, value_area: 800 } },
+                        color: { value: "#39ff14" },
+                        shape: { type: "polygon", polygon: { nb_sides: 6 } },
+                        opacity: { value: 0.7, random: true },
+                        size: { value: 3, random: true },
+                        line_linked: { enable: true, distance: 100, color: "#ff1a8c", opacity: 0.6, width: 1.2 },
+                        move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
+                    },
+                    interactivity: {
+                        detect_on: "canvas",
+                        events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: true, mode: "push" }, resize: true },
+                        modes: { grab: { distance: 150, line_linked: { opacity: 0.8 } }, push: { particles_nb: 4 } }
+                    },
+                    retina_detect: true
+                });
+            } else {
+                console.error('particlesJS not loaded');
+            }
 
-        document.querySelector('.menu-toggle').addEventListener('click', () => {
-            document.querySelector('.nav-links').classList.toggle('active');
-        });
+            // Navbar and menu functionality
+            window.addEventListener('scroll', () => {
+                document.querySelector('.navbar').classList.toggle('sticky', window.scrollY > 0);
+            });
 
-        document.getElementById('signup-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Account activated! Welcome to VoltronBot.');
-        });
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navLinks = document.querySelector('.nav-links');
 
-        let connectedWallet = null;
+            if (menuToggle && navLinks) {
+                menuToggle.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    navLinks.classList.toggle('active');
+                });
 
-        function truncateAddress(address) {
-            return `${address.slice(0, 6)}...${address.slice(-4)}`;
-        }
+                document.addEventListener('click', (event) => {
+                    if (!menuToggle.contains(event.target) && !navLinks.contains(event.target)) {
+                        navLinks.classList.remove('active');
+                    }
+                });
+            } else {
+                console.error('Menu toggle or nav links not found');
+            }
 
-        async function connectWallet() {
-            console.log('Connect Wallet button clicked'); // Debug log
-            const ethProvider = window.ethereum;
-            const solProvider = window.solana;
-            const status = document.getElementById('wallet-status');
+            // Signup form
+            const signupForm = document.getElementById('signup-form');
+            if (signupForm) {
+                signupForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    alert('Account activated! Welcome to VoltronBot.');
+                });
+            } else {
+                console.error('Signup form not found');
+            }
 
-            if (!ethProvider && !solProvider) {
-                console.log('No wallet provider detected'); // Debug log
-                status.textContent = 'Please install MetaMask, Phantom, or another supported wallet.';
-                status.style.color = 'var(--vibe-pink)';
+            // Wallet connection logic (Phantom only)
+            const walletButton = document.getElementById('add-wallet-btn');
+            const walletStatus = document.getElementById('wallet-status');
+
+            if (!walletButton || !walletStatus) {
+                console.error('Wallet button or status element not found');
                 return;
             }
 
-            status.textContent = 'Connecting wallet...';
-            status.style.color = 'var(--vibe-cyan)';
+            console.log('Wallet button found, attaching event listener...');
+            walletButton.addEventListener('click', () => {
+                console.log('Connect Phantom Wallet button clicked');
+                connectWallet();
+            });
 
-            try {
-                if (ethProvider) {
-                    console.log('MetaMask detected'); // Debug log
-                    const provider = new ethers.providers.Web3Provider(ethProvider);
-                    await provider.send('eth_requestAccounts', []);
-                    const signer = provider.getSigner();
-                    const address = await signer.getAddress();
-                    connectedWallet = { type: 'MetaMask', address, provider };
-                    status.textContent = `Wallet connected via MetaMask: ${truncateAddress(address)}`;
-                } else if (solProvider && solProvider.isPhantom) {
-                    console.log('Phantom Wallet detected'); // Debug log
+            let connectedWallet = null;
+
+            function truncateAddress(address) {
+                return `${address.slice(0, 6)}...${address.slice(-4)}`;
+            }
+
+            async function connectWallet() {
+                console.log('connectWallet function called');
+                
+                const solProvider = window.solana;
+
+                console.log('Solana provider:', solProvider ? 'Detected' : 'Not Detected');
+
+                if (!solProvider || !solProvider.isPhantom) {
+                    walletStatus.textContent = 'Please install Phantom wallet.';
+                    walletStatus.style.color = 'var(--vibe-pink)';
+                    console.error('Phantom wallet not detected');
+                    return;
+                }
+
+                walletStatus.textContent = 'Connecting Phantom wallet...';
+                walletStatus.style.color = 'var(--vibe-cyan)';
+
+                try {
                     await solProvider.connect();
                     const address = solProvider.publicKey.toString();
                     connectedWallet = { type: 'Phantom', address, provider: solProvider };
-                    status.textContent = `Wallet connected via Phantom: ${truncateAddress(address)}`;
-                } else if (window.coinbaseWalletExtension) {
-                    console.log('Coinbase Wallet detected'); // Debug log
-                    const coinbaseProvider = window.coinbaseWalletExtension;
-                    const provider = new ethers.providers.Web3Provider(coinbaseProvider);
-                    await provider.send('eth_requestAccounts', []);
-                    const signer = provider.getSigner();
-                    const address = await signer.getAddress();
-                    connectedWallet = { type: 'Coinbase Wallet', address, provider };
-                    status.textContent = `Wallet connected via Coinbase Wallet: ${truncateAddress(address)}`;
-                } else {
-                    console.log('No supported wallet found'); // Debug log
-                    status.textContent = 'No supported wallet found.';
+                    walletStatus.textContent = `Connected via Phantom: ${truncateAddress(address)}`;
+                    walletStatus.style.color = 'var(--neon-lime)';
+                    console.log('Phantom connected:', address);
+                } catch (error) {
+                    console.error('Wallet connection failed:', error);
+                    walletStatus.textContent = `Connection failed: ${error.message || 'Unknown error'}`;
+                    walletStatus.style.color = 'var(--vibe-pink)';
+                }
+            }
+
+            // Updated payment function for 1 SOL
+            async function payWithWallet(botType, crypto, volume, form, status) {
+                if (!connectedWallet) {
+                    status.textContent = 'Please connect your Phantom wallet first.';
                     status.style.color = 'var(--vibe-pink)';
                     return;
                 }
 
-                status.style.color = 'var(--neon-lime)';
-            } catch (error) {
-                console.error('Error connecting wallet:', error); // Debug log
-                status.textContent = `Error: ${error.message}`;
-                status.style.color = 'var(--vibe-pink)';
-            }
-        }
+                status.textContent = 'Initiating 1 SOL payment...';
+                status.style.color = 'var(--vibe-cyan)';
 
-        document.getElementById('add-wallet-btn').addEventListener('click', () => {
-            console.log('Add Wallet button event listener triggered'); // Debug log
-            connectWallet();
-        });
-
-        async function payWithWallet(botType, crypto, volume, form, status) {
-            if (!connectedWallet) {
-                status.textContent = 'Please connect a wallet first using "Connect Wallet".';
-                status.style.color = 'var(--vibe-pink)';
-                return;
-            }
-
-            status.textContent = 'Initiating $100 USDC payment...';
-            status.style.color = 'var(--vibe-cyan)';
-
-            try {
-                let txHash;
-                const fee = connectedWallet.type === 'MetaMask' ? ethers.utils.parseUnits('100', 6) : 100 * 10 ** 6;
-                const ethWalletAddress = 'YOUR_ETHEREUM_USDC_WALLET'; // Replace in backend
-                const solWalletAddress = 'YOUR_SOLANA_USDC_WALLET';   // Replace in backend
-
-                if (connectedWallet.type === 'MetaMask') {
-                    const provider = connectedWallet.provider;
-                    const signer = provider.getSigner();
-                    const usdcContract = new ethers.Contract(
-                        '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-                        ['function transfer(address to, uint256 value) returns (bool)'],
-                        signer
-                    );
-                    const tx = await usdcContract.transfer(ethWalletAddress, fee);
-                    status.textContent = 'Awaiting transaction confirmation...';
-                    await tx.wait();
-                    txHash = tx.hash;
-                } else if (connectedWallet.type === 'Phantom') {
+                try {
                     const connection = new solanaWeb3.Connection('https://api.mainnet-beta.solana.fm', 'confirmed');
-                    const usdcMint = new solanaWeb3.PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
-                    const walletAddress = new solanaWeb3.PublicKey(solWalletAddress);
+                    const walletAddress = new solanaWeb3.PublicKey('YOUR_SOLANA_WALLET_ADDRESS'); // Replace with your Solana wallet address
                     const userPublicKey = new solanaWeb3.PublicKey(connectedWallet.address);
 
                     const transaction = new solanaWeb3.Transaction();
-                    const tokenAccountFrom = (await connection.getTokenAccountsByOwner(userPublicKey, { mint: usdcMint })).value[0].pubkey;
-                                const tokenAccountTo = (await connection.getTokenAccountsByOwner(walletAddress, { mint: usdcMint })).value[0].pubkey || (await createTokenAccount(connection, walletAddress, usdcMint));
-                            }
-                        } catch (error) {
-                            status.textContent = `Payment failed: ${error.message}`;
-                            status.style.color = 'var(--vibe-pink)';
-                        }
-                    }
+                    const lamports = solanaWeb3.LAMPORTS_PER_SOL * 1; // 1 SOL in lamports
+
+                    transaction.add(
+                        solanaWeb3.SystemProgram.transfer({
+                            fromPubkey: userPublicKey,
+                            toPubkey: walletAddress,
+                            lamports: lamports,
+                        })
+                    );
+
+                    const { blockhash } = await connection.getRecentBlockhash();
+                    transaction.recentBlockhash = blockhash;
+                    transaction.feePayer = userPublicKey;
+
+                    const signedTransaction = await connectedWallet.provider.signTransaction(transaction);
+                    const signature = await connection.sendRawTransaction(signedTransaction.serialize());
+                    await connection.confirmTransaction(signature, 'confirmed');
+
+                    status.textContent = `Payment successful! Transaction Hash: ${signature}`;
+                    status.style.color = 'var(--neon-lime)';
+                    form.reset();
+                } catch (error) {
+                    console.error('Payment failed:', error);
+                    status.textContent = `Payment failed: ${error.message}`;
+                    status.style.color = 'var(--vibe-pink)';
+                }
+            }
+
+            // Attach payment handlers to forms
+            const volumeBotForms = document.querySelectorAll('.volume-bot-form');
+            volumeBotForms.forEach(form => {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const botType = form.dataset.type;
+                    const crypto = form.querySelector('[name="crypto"]').value;
+                    const volume = form.querySelector('[name="volume"]').value;
+                    const status = form.nextElementSibling;
+                    await payWithWallet(botType, crypto, volume, form, status);
+                });
+            });
+
+            const sneakerBotForm = document.getElementById('sneaker-bot-form');
+            if (sneakerBotForm) {
+                sneakerBotForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const url = sneakerBotForm.querySelector('[name="url"]').value;
+                    const size = sneakerBotForm.querySelector('[name="size"]').value;
+                    const quantity = sneakerBotForm.querySelector('[name="quantity"]').value;
+                    const status = document.getElementById('sneaker-bot-status');
+                    await payWithWallet('sneaker-bot', { url, size, quantity }, null, sneakerBotForm, status);
+                });
+            }
+        });
     </script>
 </body>
 </html>
