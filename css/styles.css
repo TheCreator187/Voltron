@@ -176,6 +176,11 @@ html, body {
     font-size: 24px;
     color: var(--vibe-cyan);
     cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--neon-lime);
+    cursor: pointer;
 }
 
 .hero {
@@ -258,6 +263,7 @@ html, body {
     text-transform: uppercase;
     letter-spacing: 1px;
     min-height: 44px; /* Tappable size */
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Improve readability on dark backgrounds */
 }
 
 .button:hover {
@@ -300,6 +306,7 @@ html, body {
     letter-spacing: 3px;
     text-align: center;
     animation: textFlicker 2.5s infinite;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Improve readability on dark backgrounds */
 }
 
 .sneaker-title {
@@ -494,6 +501,9 @@ html, body {
     color: var(--vibe-cyan);
     text-align: center;
     text-shadow: 0 0 10px var(--vibe-cyan);
+    padding: 10px;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.7);
 }
 
 .crypto-title {
@@ -624,6 +634,7 @@ html, body {
     color: var(--neon-lime);
     margin-bottom: 10px;
     text-transform: uppercase;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Improve readability on dark backgrounds */
 }
 
 .section-subtitle {
@@ -644,6 +655,31 @@ html, body {
     display: flex;
     flex-direction: column;
     gap: 20px;
+}
+
+.modern-form .optional-group {
+    position: relative;
+}
+
+.toggle-options {
+    background: transparent;
+    border: 1px solid var(--vibe-cyan);
+    color: var(--neon-lime);
+    padding: 5px 10px;
+    font-family: 'Rajdhani', sans-serif;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    transition: all 0.3s ease;
+}
+
+.toggle-options:hover {
+    background: rgba(57, 255, 20, 0.2);
+}
+
+.advanced-options {
+    display: none;
+    margin-top: 10px;
 }
 
 .form-grid {
@@ -667,6 +703,7 @@ html, body {
     font-size: 1rem;
     color: var(--neon-lime);
     margin-bottom: 5px;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Improve readability on dark backgrounds */
 }
 
 .form-group input,
@@ -685,7 +722,8 @@ html, body {
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-    outline: none;
+    outline: 2px solid var(--neon-lime);
+    outline-offset: 2px;
     border-color: var(--neon-lime);
     box-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
 }
