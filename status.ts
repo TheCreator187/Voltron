@@ -63,7 +63,15 @@ const main = async () => {
   console.log("Check interval: ", CHECK_BAL_INTERVAL, "ms")
 
   let poolId: PublicKey
-  poolKeys = await PoolKeys.fetchPoolKeyInfo(solanaConnection, baseMint, NATIVE_MINT)
+  const fetchedPoolKeys = await PoolKeys.fetchPoolKeyInfo(solanaConnection, baseMint, NATIVE_MINT)
+  poolKeys = {
+    ...fetchedPoolKeys,
+    baseDecimals: 0, // Replace with the actual value
+    marketBaseVault: new PublicKey(''), // Replace with the actual PublicKey
+    marketQuoteVault: new PublicKey(''), // Replace with the actual PublicKey
+    marketBids: new PublicKey(''), // Replace with the actual PublicKey
+    marketAsks: new PublicKey(''), // Replace with the actual PublicKey
+  } as LiquidityPoolKeysV4
   poolId = poolKeys.id
   quoteVault = poolKeys.quoteVault
   console.log(`Successfully fetched pool info`)

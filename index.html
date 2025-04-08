@@ -53,6 +53,20 @@
                 navLinks.classList.remove('active');
             }
         });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM fully loaded and parsed'); // Debug log
+            const walletButton = document.getElementById('add-wallet-btn');
+            if (!walletButton) {
+                console.error('Connect Wallet button not found'); // Debug log
+                return;
+            }
+
+            walletButton.addEventListener('click', () => {
+                console.log('Connect Wallet button clicked'); // Debug log
+                connectWallet();
+            });
+        });
     </script>
 
     <section class="hero" id="home">
@@ -248,12 +262,14 @@
         }
 
         async function connectWallet() {
+            console.log('Connect Wallet button clicked'); // Debug log
             const ethProvider = window.ethereum;
             const solProvider = window.solana;
             const status = document.getElementById('wallet-status');
 
             if (!ethProvider && !solProvider) {
-                status.textContent = 'Please install MetaMask or Phantom wallet.';
+                console.log('No wallet provider detected'); // Debug log
+                status.textContent = 'Please install MetaMask, Phantom, or another supported wallet.';
                 status.style.color = 'var(--vibe-pink)';
                 return;
             }
@@ -263,6 +279,7 @@
 
             try {
                 if (ethProvider) {
+                    console.log('MetaMask detected'); // Debug log
                     const provider = new ethers.providers.Web3Provider(ethProvider);
                     await provider.send('eth_requestAccounts', []);
                     const signer = provider.getSigner();
@@ -270,19 +287,39 @@
                     connectedWallet = { type: 'MetaMask', address, provider };
                     status.textContent = `Wallet connected via MetaMask: ${truncateAddress(address)}`;
                 } else if (solProvider && solProvider.isPhantom) {
+                    console.log('Phantom Wallet detected'); // Debug log
                     await solProvider.connect();
                     const address = solProvider.publicKey.toString();
                     connectedWallet = { type: 'Phantom', address, provider: solProvider };
                     status.textContent = `Wallet connected via Phantom: ${truncateAddress(address)}`;
+                } else if (window.coinbaseWalletExtension) {
+                    console.log('Coinbase Wallet detected'); // Debug log
+                    const coinbaseProvider = window.coinbaseWalletExtension;
+                    const provider = new ethers.providers.Web3Provider(coinbaseProvider);
+                    await provider.send('eth_requestAccounts', []);
+                    const signer = provider.getSigner();
+                    const address = await signer.getAddress();
+                    connectedWallet = { type: 'Coinbase Wallet', address, provider };
+                    status.textContent = `Wallet connected via Coinbase Wallet: ${truncateAddress(address)}`;
+                } else {
+                    console.log('No supported wallet found'); // Debug log
+                    status.textContent = 'No supported wallet found.';
+                    status.style.color = 'var(--vibe-pink)';
+                    return;
                 }
+
                 status.style.color = 'var(--neon-lime)';
             } catch (error) {
+                console.error('Error connecting wallet:', error); // Debug log
                 status.textContent = `Error: ${error.message}`;
                 status.style.color = 'var(--vibe-pink)';
             }
         }
 
-        document.getElementById('add-wallet-btn').addEventListener('click', connectWallet);
+        document.getElementById('add-wallet-btn').addEventListener('click', () => {
+            console.log('Add Wallet button event listener triggered'); // Debug log
+            connectWallet();
+        });
 
         async function payWithWallet(botType, crypto, volume, form, status) {
             if (!connectedWallet) {
@@ -327,3 +364,6 @@
                             status.style.color = 'var(--vibe-pink)';
                         }
                     }
+    </script>
+</body>
+</html>

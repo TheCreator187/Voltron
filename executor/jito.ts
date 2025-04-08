@@ -61,7 +61,10 @@ async function build_bundle(
 ) {
  
   const accounts = await search.getTipAccounts()
-  const _tipAccount = accounts[Math.min(Math.floor(Math.random() * accounts.length), 3)]
+  if (!accounts.ok) {
+    throw new Error("Failed to fetch tip accounts");
+  }
+  const _tipAccount = accounts.value[Math.min(Math.floor(Math.random() * accounts.value.length), 3)];
   const tipAccount = new PublicKey(_tipAccount)
 
   const bund = new Bundle([], bundleTransactionLimit)
