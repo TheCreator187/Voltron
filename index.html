@@ -36,13 +36,22 @@
         const menuToggle = document.querySelector('.menu-toggle');
         const navLinks = document.querySelector('.nav-links');
 
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-
         // Ensure the menu is hidden initially
         document.addEventListener('DOMContentLoaded', () => {
             navLinks.classList.remove('active');
+        });
+
+        // Toggle the menu visibility when the menu button is clicked
+        menuToggle.addEventListener('click', (event) => {
+            event.stopPropagation(); // Prevent click from propagating to document
+            navLinks.classList.toggle('active');
+        });
+
+        // Close the menu when clicking outside of it
+        document.addEventListener('click', (event) => {
+            if (!menuToggle.contains(event.target) && !navLinks.contains(event.target)) {
+                navLinks.classList.remove('active');
+            }
         });
     </script>
 
