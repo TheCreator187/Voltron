@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="VoltronBot - Manage your billing and purchase history.">
+    <meta name="keywords" content="sneaker bot billing, purchase history">
+    <meta name="author" content="CryptoVoltron Team">
+    <title>VoltronBot - Billing & Purchase History</title>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;800&family=Orbitron:wght@500;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="background">
+        <div class="gradient-overlay"></div>
+        <div class="grid-lines"></div>
+        <div id="particles-js"></div>
+    </div>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <span class="logo-text">VoltronBot</span>
+            <span class="logo-subtext">by B TechLabs</span>
+        </a>
+        <span class="menu-toggle">☰</span>
+        <div class="nav-links">
+            <a href="index.html#home">Home</a>
+            <a href="index.html#volume-bot">Volume Bot</a>
+            <a href="index.html#sneaker-bot">Sneaker Bot</a>
+            <a href="#" class="highlight-link">Billing</a>
+            <a href="index.html#signup">Sign Up</a>
+            <a href="index.html#contact">Contact</a>
+        </div>
+    </nav>
+
+    <main class="main">
+        <section class="billing modern-section" id="billing">
+            <h2 class="section-title">Billing & Purchase History</h2>
+            <div class="billing-container">
+                <form id="billing-form" class="billing-form modern-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="billing-name">Full Name</label>
+                            <input type="text" id="billing-name" placeholder="John Doe" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="billing-address">Address</label>
+                            <input type="text" id="billing-address" placeholder="123 Sneaker St" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="billing-card">Card Number</label>
+                            <input type="text" id="billing-card" placeholder="1234 5678 9012 3456" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="billing-expiry">Expiry Date</label>
+                            <input type="text" id="billing-expiry" placeholder="MM/YY" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="billing-cvv">CVV</label>
+                            <input type="text" id="billing-cvv" placeholder="123" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="button primary-button">Save Billing Info</button>
+                </form>
+                <div id="pending-purchase" class="pending-purchase" style="display: none;">
+                    <h3>Confirm Purchase</h3>
+                    <p id="purchase-details"></p>
+                    <button id="confirm-purchase" class="button primary-button">Confirm</button>
+                    <button id="cancel-purchase" class="button secondary-button">Cancel</button>
+                </div>
+                <div id="purchase-history" class="purchase-history">
+                    <h3>Purchase History</h3>
+                    <div id="history-list"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer modern-footer">
+        <div class="footer-content">
+            <p>© 2025 VoltronBot. All Rights Reserved.</p>
+            <div class="social-links">
+                <a href="https://x.com" aria-label="X" class="social-link"><i class="fab fa-x-twitter"></i></a>
+                <a href="https://discord.com" aria-label="Discord" class="social-link"><i class="fab fa-discord"></i></a>
+                <a href="https://telegram.org" aria-label="Telegram" class="social-link"><i class="fab fa-telegram-plane"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- External Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <script>
+        // Fixed typo: particlesJS instead of particles использованияJS
+        particlesJS("particles-js", {
+            particles: {
+                number: { value: 120, density: { enable: true, value_area: 800 } },
+                color: { value: "#39ff14" },
+                shape: { type: "polygon", polygon: { nb_sides: 6 } },
+                opacity: { value: 0.7, random: true },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 100, color: "#ff1a8c", opacity: 0.6, width: 1.2 },
+                move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: true, mode: "push" }, resize: true },
+                modes: { grab: { distance: 150, line_linked: { opacity: 0.8 } }, push: { particles_nb: 4 } }
+            },
+            retina_detect: true
+        });
+
+        const billingForm = document.getElementById('billing-form');
+        const historyList = document.getElementById('history-list');
+        const pendingPurchaseDiv = document.getElementById('pending-purchase');
+        const purchaseDetails = document.getElementById('purchase-details');
+        const confirmButton = document.getElementById('confirm-purchase');
+        const cancelButton = document.getElementById('cancel-purchase');
+
+        billingForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const billingInfo = {
+                name: document.getElementById('billing-name').value,
+                address: document.getElementById('billing-address').value,
+                card: document.getElementById('billing-card').value,
+                expiry: document.getElementById('billing-expiry').value,
+                cvv: document.getElementById('billing-cvv').value
+            };
+            localStorage.setItem('billingInfo', JSON.stringify(billingInfo));
+            alert('Billing info saved!');
+            billingForm.reset();
+        });
+
+        function loadPurchaseHistory() {
+            const history = JSON.parse(localStorage.getItem('purchaseHistory') || '[]');
+            historyList.innerHTML = '';
+            history.forEach(item => {
+                const div = document.createElement('div');
+                div.innerHTML = `<p>Purchased: ${item.url} - $${item.price}</p>`;
+                historyList.appendChild(div);
+            });
+        }
+
+        function checkPendingPurchase() {
+            const pending = JSON.parse(localStorage.getItem('pendingPurchase') || '{}');
+            if (pending.url) {
+                pendingPurchaseDiv.style.display = 'block';
+                purchaseDetails.textContent = `Confirm purchase of ${pending.quantity} item(s) from ${pending.url}`;
+            }
+        }
+
+        confirmButton.addEventListener('click', () => {
+            localStorage.setItem('purchaseConfirmed', 'true');
+            window.close();
+        });
+
+        cancelButton.addEventListener('click', () => {
+            localStorage.setItem('purchaseConfirmed', 'false');
+            window.close();
+        });
+
+        loadPurchaseHistory();
+        checkPendingPurchase();
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="VoltronBot - Boost your meme coin volume on Raydium and automate sneaker drops.">
+    <meta name="description" content="VoltronBot - Boost your meme coin volume on Raydium and automate sneaker purchases.">
     <meta name="keywords" content="solana volume bot, meme coin booster, raydium trading, sneaker bot">
     <meta name="author" content="CryptoVoltron Team">
     <title>VoltronBot - Meme Coin & Sneaker Automation</title>
@@ -27,6 +27,7 @@
             <a href="#home">Home</a>
             <a href="#volume-bot">Volume Bot</a>
             <a href="#sneaker-bot" class="highlight-link">Sneaker Bot</a>
+            <a href="billing.html">Billing</a>
             <a href="#signup">Sign Up</a>
             <a href="#contact">Contact</a>
         </div>
@@ -37,8 +38,8 @@
             <img src="images/space.jpg" alt="Crypto Space Background">
         </div>
         <div class="content">
-            <h1>Boost Your Meme Coin & Buy Sneakers</h1>
-            <p>Supercharge your meme coin volume on Raydium and buy sneakers from every store for 1 SOL each—via Phantom wallet.</p>
+            <h1>Boost Your Meme Coin & Cop Sneakers</h1>
+            <p>Supercharge your meme coin volume on Raydium and automate sneaker purchases with ease.</p>
             <button id="add-wallet-btn" class="button" onclick="connectWallet()">Connect Phantom Wallet</button>
             <div id="wallet-status" class="wallet-status"></div>
         </div>
@@ -67,86 +68,80 @@
         </section>
 
         <section class="sneaker-bot modern-section" id="sneaker-bot">
-            <h2 class="section-title sneaker-title">Sneaker Bot Arsenal</h2>
-            <p class="section-subtitle">Purchase sneakers from any store with cutting-edge automation. Fee: 1 SOL per attempt.</p>
+            <h2 class="section-title sneaker-title">Sneaker Purchase Bot</h2>
+            <p class="section-subtitle">Search, confirm, and cop sneakers with ease.</p>
             <div class="sneaker-bot-container">
-                <form id="sneaker-bot-form" class="sneaker-bot-form modern-form">
+                <form id="sneaker-search-form" class="sneaker-search-form modern-form">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="sites">Search Stores</label>
-                            <select name="sites" id="sites" multiple required>
-                                <option value="nike">Nike</option>
-                                <option value="adidas">Adidas</option>
-                                <option value="footlocker">Footlocker</option>
-                                <option value="stockx">StockX</option>
-                                <option value="goat">GOAT</option>
-                                <option value="supreme">Supreme</option>
-                                <option value="kith">Kith</option>
-                                <option value="sneakersnstuff">Sneakersnstuff</option>
-                                <option value="finishline">Finish Line</option>
-                                <option value="jdsports">JD Sports</option>
-                                <option value="ebay">eBay</option>
-                            </select>
+                            <label for="sneaker-name">Sneaker Name</label>
+                            <input type="text" id="sneaker-name" placeholder="e.g., Air Jordan 1" required>
                         </div>
                         <div class="form-group">
-                            <label for="sneakerName">Sneaker Name</label>
-                            <input type="text" name="sneakerName" id="sneakerName" placeholder="e.g., Air Jordan 1" required>
+                            <label for="sneaker-brand">Brand</label>
+                            <input type="text" id="sneaker-brand" placeholder="e.g., Nike">
                         </div>
                         <div class="form-group">
-                            <label for="brand">Brand</label>
-                            <input type="text" name="brand" id="brand" placeholder="e.g., Nike, Adidas" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="color">Color (Optional)</label>
-                            <input type="text" name="color" id="color" placeholder="e.g., Black, White">
-                        </div>
-                        <div class="form-group">
-                            <label for="maxPrice">Max Price (Optional, $)</label>
-                            <input type="number" name="maxPrice" id="maxPrice" placeholder="e.g., 200" min="1" step="1">
-                        </div>
-                        <div class="form-group">
-                            <label for="sneaker-url">Selected URL</label>
-                            <input type="text" name="url" id="sneaker-url" placeholder="Auto-filled after lookup" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="size-select">Size</label>
-                            <select name="size" id="size-select" required>
+                            <label for="sneaker-size">Size</label>
+                            <select id="sneaker-size">
                                 <option value="">Select Size</option>
-                                <!-- Sizes populated dynamically -->
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="quantity">Quantity</label>
-                            <input type="number" name="quantity" id="quantity" placeholder="1-5" min="1" max="5" required>
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="proxies">Proxies (Optional)</label>
-                            <textarea name="proxies" id="proxies" placeholder="One per line, e.g., 192.168.1.1:8080" rows="3"></textarea>
+                            <label for="custom-url">Custom URL (Optional)</label>
+                            <input type="text" id="custom-url" placeholder="e.g., https://stockx.com/sneaker">
                         </div>
                     </div>
-                    <div class="form-actions">
-                        <button type="button" class="button secondary-button" onclick="lookupSneakers()">Lookup Sneakers</button>
-                        <button type="button" class="button secondary-button" onclick="checkStock()">Check Stock</button>
-                        <button type="submit" class="button primary-button sneaker-button">Auto-Buy</button>
-                    </div>
+                    <button type="submit" class="button primary-button">Search Sneakers</button>
                 </form>
-                <div id="sneaker-bot-status" class="status-message"></div>
-                <div id="lookup-results" class="lookup-results"></div>
+                <div id="search-results" class="search-results"></div>
+
+                <form id="sneaker-purchase-form" class="sneaker-purchase-form modern-form" style="display: none;">
+                    <div class="form-group">
+                        <label for="selected-url">Selected Product URL</label>
+                        <input type="text" id="selected-url" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">Quantity</label>
+                        <input type="number" id="quantity" min="1" max="5" value="1" required>
+                    </div>
+                    <button type="submit" class="button primary-button sneaker-button">Start Purchase Tasks</button>
+                </form>
+                <div id="task-container" class="task-container"></div>
+
+                <div id="queue-monitor" class="queue-monitor">
+                    <h3>Queue Monitoring</h3>
+                    <p>Status: <span id="queue-status">Idle</span></p>
+                    <button class="button secondary-button" onclick="startQueueMonitor()">Start Queue Monitor</button>
+                </div>
+
+                <div id="barcode-scanner" class="barcode-scanner">
+                    <h3>Sneaker Collection</h3>
+                    <input type="text" id="barcode-input" placeholder="Scan or Enter Barcode">
+                    <button class="button secondary-button" onclick="scanBarcode()">Add to Collection</button>
+                    <div id="collection-list"></div>
+                </div>
             </div>
         </section>
 
         <section class="features">
-            <h2 class="section-title crypto-title">Supported Cryptocurrency</h2>
+            <h2 class="section-title crypto-title">Supported Payment Methods</h2>
             <div class="crypto-grid">
                 <div class="crypto-item"><img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/32/color/sol.png" alt="Solana"><span>Solana (SOL)</span></div>
+                <div class="crypto-item"><img src="https://stripe.com/img/v3/home/social.png" alt="Stripe" style="width: 32px;"><span>Credit Card (Stripe)</span></div>
             </div>
-            <p class="crypto-note">Optimized for meme coins on Raydium and sneaker drops from every store!</p>
         </section>
 
         <section class="signup modern-signup" id="signup">
             <div class="signup-content">
                 <h2 class="section-title">Join the Revolution</h2>
-                <p class="signup-description">Boost your meme coin volume and buy sneakers from any store for just 1 SOL each via Phantom wallet.</p>
+                <p class="signup-description">Boost your meme coin volume and cop sneakers via Phantom wallet or credit card.</p>
                 <form id="signup-form" class="signup-form">
                     <div class="form-group">
                         <input type="email" name="email" class="form-input" placeholder="Enter Your Email" required>
@@ -173,543 +168,331 @@
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/buffer@6.0.3/index.min.js"></script>
     <script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
 
     <script>
-        console.log('Script started executing...');
+        const stripe = Stripe('pk_test_your_publishable_key'); // Replace with your Stripe publishable key
+        const BACKEND_URL = 'http://localhost:3000'; // Adjust if deployed
 
-        // Verify Buffer and Buffer.from
-        if (typeof Buffer === 'undefined') {
-            console.error('Buffer is not defined');
-        } else if (typeof Buffer.from !== 'function') {
-            console.error('Buffer.from is not a function');
-        } else {
-            console.log('Buffer and Buffer.from loaded successfully');
+        // Buffer Polyfill
+        if (typeof Buffer === 'undefined' || typeof Buffer.from !== 'function') {
+            window.Buffer = window.Buffer || {};
+            window.Buffer.from = function(data) {
+                if (Array.isArray(data) || data instanceof Uint8Array) {
+                    return new Uint8Array(data);
+                } else if (typeof data === 'string') {
+                    return new TextEncoder().encode(data);
+                }
+                throw new Error('Unsupported Buffer.from input');
+            };
+            window.Buffer.alloc = function(size) {
+                return new Uint8Array(size);
+            };
         }
 
-        // Particle.js setup
-        if (typeof particlesJS !== 'undefined') {
-            particlesJS("particles-js", {
-                particles: {
-                    number: { value: 120, density: { enable: true, value_area: 800 } },
-                    color: { value: "#39ff14" },
-                    shape: { type: "polygon", polygon: { nb_sides: 6 } },
-                    opacity: { value: 0.7, random: true },
-                    size: { value: 3, random: true },
-                    line_linked: { enable: true, distance: 100, color: "#ff1a8c", opacity: 0.6, width: 1.2 },
-                    move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
-                },
-                interactivity: {
-                    detect_on: "canvas",
-                    events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: true, mode: "push" }, resize: true },
-                    modes: { grab: { distance: 150, line_linked: { opacity: 0.8 } }, push: { particles_nb: 4 } }
-                },
-                retina_detect: true
-            });
-            console.log('Particles.js initialized');
-        } else {
-            console.error('particlesJS not loaded');
-        }
-
-        // Navbar and menu functionality
-        window.addEventListener('scroll', () => {
-            document.querySelector('.navbar').classList.toggle('sticky', window.scrollY > 0);
+        // Particle.js Setup
+        particlesJS("particles-js", {
+            particles: {
+                number: { value: 120, density: { enable: true, value_area: 800 } },
+                color: { value: "#39ff14" },
+                shape: { type: "polygon", polygon: { nb_sides: 6 } },
+                opacity: { value: 0.7, random: true },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 100, color: "#ff1a8c", opacity: 0.6, width: 1.2 },
+                move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: true, mode: "push" }, resize: true },
+                modes: { grab: { distance: 150, line_linked: { opacity: 0.8 } }, push: { particles_nb: 4 } }
+            },
+            retina_detect: true
         });
 
-        const menuToggle = document.querySelector('.menu-toggle');
-        const navLinks = document.querySelector('.nav-links');
-
-        if (menuToggle && navLinks) {
-            menuToggle.addEventListener('click', (event) => {
-                event.stopPropagation();
-                navLinks.classList.toggle('active');
-            });
-
-            document.addEventListener('click', (event) => {
-                if (!menuToggle.contains(event.target) && !navLinks.contains(event.target)) {
-                    navLinks.classList.remove('active');
-                }
-            });
-            console.log('Menu toggle initialized');
-        } else {
-            console.error('Menu toggle or nav links not found');
-        }
-
-        // Signup form
-        const signupForm = document.getElementById('signup-form');
-        if (signupForm) {
-            signupForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                alert('Account activated! Welcome to VoltronBot.');
-            });
-            console.log('Signup form initialized');
-        } else {
-            console.error('Signup form not found');
-        }
-
-        // Wallet connection logic
-        const walletButton = document.getElementById('add-wallet-btn');
-        const walletStatus = document.getElementById('wallet-status');
-
-        if (!walletButton || !walletStatus) {
-            console.error('Wallet button or status element not found');
-        } else {
-            console.log('Wallet button found, attaching event listener...');
-            walletButton.addEventListener('click', () => {
-                console.log('Connect Phantom Wallet button clicked (via addEventListener)');
-                connectWallet();
-            });
-        }
-
+        // Wallet Connection
         let connectedWallet = null;
-
-        function truncateAddress(address) {
-            return `${address.slice(0, 6)}...${address.slice(-4)}`;
-        }
-
         async function connectWallet() {
-            console.log('connectWallet function called');
-            alert('Button clicked! Attempting to connect Phantom wallet...');
-
             const solProvider = window.solana;
-            console.log('Solana provider:', solProvider ? 'Detected' : 'Not Detected');
-
             if (!solProvider || !solProvider.isPhantom) {
-                walletStatus.textContent = 'Please install Phantom wallet.';
-                walletStatus.style.color = 'var(--vibe-pink)';
-                console.error('Phantom wallet not detected');
+                document.getElementById('wallet-status').textContent = 'Please install Phantom wallet.';
                 return;
             }
-
-            walletStatus.textContent = 'Connecting Phantom wallet...';
-            walletStatus.style.color = 'var(--vibe-cyan)';
-
             try {
                 await solProvider.connect();
-                const address = solProvider.publicKey.toString();
-                if (!address || typeof address !== 'string') {
-                    throw new Error('Invalid wallet address received from Phantom');
-                }
-                connectedWallet = { type: 'Phantom', address, provider: solProvider };
-                walletStatus.textContent = `Connected via Phantom: ${truncateAddress(address)}`;
-                walletStatus.style.color = 'var(--neon-lime)';
-                console.log('Phantom connected:', address);
+                connectedWallet = { address: solProvider.publicKey.toString(), provider: solProvider };
+                document.getElementById('wallet-status').textContent = `Connected: ${connectedWallet.address.slice(0, 6)}...${connectedWallet.address.slice(-4)}`;
             } catch (error) {
-                console.error('Wallet connection failed:', error);
-                walletStatus.textContent = `Connection failed: ${error.message || 'Unknown error'}`;
-                walletStatus.style.color = 'var(--vibe-pink)';
+                document.getElementById('wallet-status').textContent = 'Connection failed.';
             }
         }
 
-        // Sneaker Bot Functions
-        const sneakerBotStatus = document.getElementById('sneaker-bot-status');
-        const sizeSelect = document.getElementById('size-select');
-        const sneakerBotForm = document.getElementById('sneaker-bot-form');
-        const lookupResults = document.getElementById('lookup-results');
-        const sneakerUrlInput = document.getElementById('sneaker-url');
+        // Sneaker Bot Logic
+        const searchForm = document.getElementById('sneaker-search-form');
+        const purchaseForm = document.getElementById('sneaker-purchase-form');
+        const searchResults = document.getElementById('search-results');
+        const taskContainer = document.getElementById('task-container');
 
-        async function lookupSneakers() {
-            const sites = Array.from(sneakerBotForm.querySelector('[name="sites"]').selectedOptions).map(opt => opt.value);
-            const sneakerName = sneakerBotForm.querySelector('[name="sneakerName"]').value;
-            const brand = sneakerBotForm.querySelector('[name="brand"]').value;
-            const color = sneakerBotForm.querySelector('[name="color"]').value || '';
-            const maxPrice = sneakerBotForm.querySelector('[name="maxPrice"]').value || Infinity;
+        searchForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('sneaker-name').value;
+            const brand = document.getElementById('sneaker-brand').value;
+            const size = document.getElementById('sneaker-size').value;
+            const customUrl = document.getElementById('custom-url').value;
+            searchResults.innerHTML = '<p>Searching...</p>';
+            const results = customUrl ? [{ url: customUrl, name, brand: brand || 'Unknown', size: size || 'N/A', price: null, store: 'Custom', inStock: true, productId: 'custom' }] : await searchSneakers(name, brand, size);
+            displaySearchResults(results);
+        });
 
-            sneakerBotStatus.textContent = `Searching for "${sneakerName}" across ${sites.length} stores...`;
-            sneakerBotStatus.style.color = 'var(--vibe-cyan)';
-
+        async function searchSneakers(name, brand, size) {
             try {
-                const allResults = await Promise.all(sites.map(site => fetchSneakerByName(site, sneakerName, brand, color, maxPrice)));
-                const flatResults = allResults.flat();
-                if (flatResults.length === 0) {
-                    sneakerBotStatus.textContent = 'No sneakers found across selected stores.';
-                    sneakerBotStatus.style.color = 'var(--vibe-pink)';
-                    lookupResults.innerHTML = '';
-                    return;
-                }
-
-                sneakerBotStatus.textContent = `Found ${flatResults.length} matches! Select one below.`;
-                sneakerBotStatus.style.color = 'var(--neon-lime)';
-                displayLookupResults(flatResults);
+                const response = await fetch(`${BACKEND_URL}/search-sneakers?name=${encodeURIComponent(name)}&brand=${encodeURIComponent(brand || '')}&size=${encodeURIComponent(size || '')}`);
+                if (!response.ok) throw new Error(`Search request failed: ${await response.text()}`);
+                return await response.json();
             } catch (error) {
-                console.error('Lookup failed:', error);
-                sneakerBotStatus.textContent = `Lookup failed: ${error.message}`;
-                sneakerBotStatus.style.color = 'var(--vibe-pink)';
-            }
-        }
-
-        async function fetchSneakerByName(site, name, brand, color, maxPrice) {
-            // Placeholder for real-time sneaker fetching
-            // Implement this with actual API calls or web scraping (e.g., Puppeteer, Axios) on your server
-            const siteEndpoints = {
-                nike: 'https://www.nike.com/w/mens-shoes-nik1zy7ok',
-                adidas: 'https://www.adidas.com/us/men-shoes',
-                footlocker: 'https://www.footlocker.com/category/mens/shoes.html',
-                stockx: 'https://stockx.com/sneakers',
-                goat: 'https://www.goat.com/sneakers',
-                supreme: 'https://www.supremenewyork.com/shop/all/shoes',
-                kith: 'https://kith.com/collections/mens-footwear',
-                sneakersnstuff: 'https://www.sneakersnstuff.com/en/904/mens-sneakers',
-                finishline: 'https://www.finishline.com/store/men/shoes/_/N-1tjdj',
-                jdsports: 'https://www.jd-sports.com/men/mens-footwear/',
-                ebay: 'https://www.ebay.com/b/Mens-Sneakers-Athletic-Shoes/15709'
-            };
-
-            try {
-                // Simulate fetching (replace with real implementation)
-                console.log(`Fetching from ${site} at ${siteEndpoints[site]}...`);
-                // Example: Use fetch() with an API or scraping tool
-                // const response = await fetch(`${siteEndpoints[site]}?q=${encodeURIComponent(name)}`);
-                // const data = await response.json();
-                // return data.filter(item => 
-                //     item.name.toLowerCase().includes(name.toLowerCase()) &&
-                //     item.brand.toLowerCase().includes(brand.toLowerCase()) &&
-                //     (color === '' || item.color.toLowerCase().includes(color.toLowerCase())) &&
-                //     item.price <= maxPrice
-                // );
-
-                // Temporary simulation until you implement real fetching
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                return [{
-                    name: `${brand} ${name}`,
-                    url: `${siteEndpoints[site]}/${name.toLowerCase().replace(/\s+/g, '-')}`,
-                    sizes: ['8', '9', '10'], // Replace with real size data
-                    price: Math.floor(Math.random() * 200) + 50,
-                    brand,
-                    color: color || 'Unknown',
-                    store: site
-                }];
-            } catch (error) {
-                console.error(`Failed to fetch from ${site}:`, error);
+                console.error('Search error:', error);
+                searchResults.innerHTML = `<p>Failed to search sneakers: ${error.message}</p>`;
                 return [];
             }
         }
 
-        function displayLookupResults(results) {
-            lookupResults.innerHTML = '';
-            results.forEach((result) => {
-                const div = document.createElement('div');
-                div.classList.add('lookup-item');
-                div.innerHTML = `<span>${result.name} (${result.brand}, ${result.color}) - $${result.price} @ ${result.store}</span> <button class="select-button" onclick="selectSneaker('${result.url}', '${result.store}')">Select</button>`;
-                lookupResults.appendChild(div);
+        function displaySearchResults(results) {
+            searchResults.innerHTML = '';
+            if (results.length === 0) {
+                searchResults.innerHTML = '<p>No sneakers found in stock.</p>';
+                return;
+            }
+            results.forEach(result => {
+                const item = document.createElement('div');
+                item.classList.add('search-result-item');
+                item.innerHTML = `
+                    <p>${result.name} - Size ${result.size} @ ${result.store} ${result.price ? `($${result.price})` : '(Price unavailable)'}</p>
+                    <button class="button secondary-button" onclick="selectSneaker('${result.url}', ${result.price || 0}, '${result.productId}')">Select</button>
+                `;
+                searchResults.appendChild(item);
             });
         }
 
-        function selectSneaker(url, store) {
-            sneakerUrlInput.value = url;
-            const sitesSelect = sneakerBotForm.querySelector('[name="sites"]');
-            Array.from(sitesSelect.options).forEach(option => {
-                option.selected = option.value === store;
+        let selectedPrice = 0;
+        let selectedProductId = '';
+        function selectSneaker(url, price, productId) {
+            document.getElementById('selected-url').value = url;
+            selectedPrice = price;
+            selectedProductId = productId;
+            purchaseForm.style.display = 'block';
+            taskContainer.innerHTML = '';
+        }
+
+        purchaseForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const url = document.getElementById('selected-url').value;
+            const quantity = parseInt(document.getElementById('quantity').value);
+            startPurchaseTasks(url, quantity);
+        });
+
+        async function startPurchaseTasks(url, quantity) {
+            taskContainer.innerHTML = '';
+            for (let i = 1; i <= 4; i++) {
+                const taskCard = document.createElement('div');
+                taskCard.classList.add('task-card');
+                taskCard.innerHTML = `
+                    <div class="status-dot" id="task-${i}-dot"></div>
+                    <h4>Task ${i}</h4>
+                    <p id="task-${i}-status">Starting...</p>
+                    <div id="task-${i}-payment" class="payment-options" style="display: none;">
+                        <label><input type="radio" name="payment-${i}" value="wallet" ${connectedWallet ? '' : 'disabled'}> Wallet (${quantity} SOL)</label>
+                        <label><input type="radio" name="payment-${i}" value="card"> Credit Card ${selectedPrice ? `($${selectedPrice * quantity})` : '(Price TBD)'}</label>
+                        <button class="button primary-button" onclick="confirmPayment(${i}, '${url}', ${quantity})">Confirm Payment</button>
+                    </div>
+                `;
+                taskContainer.appendChild(taskCard);
+                runPurchaseTask(i, url, quantity);
+            }
+        }
+
+        async function runPurchaseTask(taskId, url, quantity) {
+            const statusDot = document.getElementById(`task-${taskId}-dot`);
+            const statusText = document.getElementById(`task-${taskId}-status`);
+            const paymentOptions = document.getElementById(`task-${taskId}-payment`);
+            statusDot.style.backgroundColor = 'green';
+
+            try {
+                statusText.textContent = 'Adding to cart...';
+                const cartResponse = await fetch(`${BACKEND_URL}/add-to-cart`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ productId: selectedProductId, quantity })
+                });
+                if (!cartResponse.ok) throw new Error(`Cart request failed: ${await cartResponse.text()}`);
+                const cartData = await cartResponse.json();
+                if (!cartData.success) throw new Error(cartData.error || 'Cart addition failed');
+
+                statusText.textContent = 'Proceeding to checkout...';
+                statusDot.style.backgroundColor = 'yellow';
+
+                statusText.textContent = 'Checking billing...';
+                if (!localStorage.getItem('billingInfo')) {
+                    statusText.textContent = 'Opening billing page...';
+                    const confirmed = await openBillingPopup(url, quantity);
+                    if (!confirmed) throw new Error('Billing not confirmed');
+                }
+
+                statusText.textContent = 'Select payment method...';
+                paymentOptions.style.display = 'block';
+                const paymentMethod = await waitForPaymentConfirmation(taskId);
+                statusText.textContent = 'Processing payment...';
+                paymentOptions.style.display = 'none';
+
+                const checkoutResult = await checkout(url, quantity, paymentMethod);
+                if (!checkoutResult.success) throw new Error(checkoutResult.error || 'Checkout failed');
+
+                statusText.textContent = `Purchase complete! ${checkoutResult.signature ? 'Tx: ' + checkoutResult.signature : 'Card processed'}`;
+                statusDot.style.backgroundColor = 'green';
+                const history = JSON.parse(localStorage.getItem('purchaseHistory') || '[]');
+                history.push({ url, price: paymentMethod === 'wallet' ? quantity : selectedPrice * quantity, method: paymentMethod });
+                localStorage.setItem('purchaseHistory', JSON.stringify(history));
+            } catch (error) {
+                statusText.textContent = `Failed: ${error.message}`;
+                statusDot.style.backgroundColor = 'red';
+                paymentOptions.style.display = 'none';
+            }
+        }
+
+        function waitForPaymentConfirmation(taskId) {
+            return new Promise((resolve) => {
+                window[`confirmPayment${taskId}`] = (method) => resolve(method);
             });
-            populateSizes();
-            sneakerBotStatus.textContent = `Selected: ${url} from ${store}`;
-            sneakerBotStatus.style.color = 'var(--neon-lime)';
-            lookupResults.innerHTML = '';
         }
 
-        async function checkStock() {
-            const site = sneakerBotForm.querySelector('[name="sites"]').selectedOptions[0]?.value;
-            const url = sneakerBotForm.querySelector('[name="url"]').value;
-            sneakerBotStatus.textContent = 'Checking stock availability...';
-            sneakerBotStatus.style.color = 'var(--vibe-cyan)';
-
-            if (!site || !url) {
-                sneakerBotStatus.textContent = 'Please select a sneaker first.';
-                sneakerBotStatus.style.color = 'var(--vibe-pink)';
-                return;
-            }
-
-            try {
-                const response = await fetchStock(site, url);
-                const { inStock } = response;
-
-                if (inStock) {
-                    sneakerBotStatus.textContent = 'Stock available!';
-                    sneakerBotStatus.style.color = 'var(--neon-lime)';
-                    populateSizes();
-                } else {
-                    sneakerBotStatus.textContent = 'Out of stock.';
-                    sneakerBotStatus.style.color = 'var(--vibe-pink)';
-                }
-            } catch (error) {
-                console.error('Stock check failed:', error);
-                sneakerBotStatus.textContent = `Stock check failed: ${error.message}`;
-                sneakerBotStatus.style.color = 'var(--vibe-pink)';
-            }
+        async function confirmPayment(taskId, url, quantity) {
+            const paymentMethod = document.querySelector(`input[name="payment-${taskId}"]:checked`)?.value;
+            if (!paymentMethod) return alert('Please select a payment method');
+            window[`confirmPayment${taskId}`](paymentMethod);
         }
 
-        function populateSizes() {
-            sizeSelect.innerHTML = '<option value="">Select Size</option>';
-            for (let size = 1; size <= 15; size += 0.5) {
-                const option = document.createElement('option');
-                option.value = size;
-                option.textContent = size;
-                sizeSelect.appendChild(option);
-            }
-        }
-
-        async function fetchStock(site, url) {
-            // Placeholder for real stock checking
-            // Replace with actual API call or scraping logic
-            console.log(`Checking stock for ${url} on ${site}...`);
-            // Example: const response = await fetch(`${url}/stock`);
-            // const data = await response.json();
-            // return { inStock: data.inStock };
-
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            return { inStock: Math.random() > 0.3 }; // Temporary simulation
-        }
-
-        async function copSneakers(site, url, size, quantity, proxies, status) {
-            if (!connectedWallet) {
-                status.textContent = 'Please connect your Phantom wallet first.';
-                status.style.color = 'var(--vibe-pink)';
-                return;
-            }
-
-            if (!url) {
-                status.textContent = 'Please lookup and select a sneaker first.';
-                status.style.color = 'var(--vibe-pink)';
-                return;
-            }
-
-            status.textContent = 'Initiating 1 SOL payment...';
-            status.style.color = 'var(--vibe-cyan)';
-
-            try {
-                const connection = new solanaWeb3.Connection('https://api.mainnet-beta.solana.fm', 'confirmed');
-                const walletAddress = new solanaWeb3.PublicKey('CdzZ2CVwvbWp19dtpVrN7L1qVJYCSv7p8Fb1xjhnWxxa');
-                let userPublicKey;
-
+        async function checkout(url, quantity, paymentMethod) {
+            if (paymentMethod === 'wallet') {
+                if (!connectedWallet) return { success: false, error: 'Wallet not connected' };
                 try {
-                    userPublicKey = new solanaWeb3.PublicKey(connectedWallet.address);
-                } catch (keyError) {
-                    throw new Error(`Invalid user wallet address: ${connectedWallet.address}`);
+                    const response = await fetch(`${BACKEND_URL}/process-solana-payment`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ senderAddress: connectedWallet.address, amount: quantity })
+                    });
+                    if (!response.ok) throw new Error(`Transaction creation failed: ${await response.text()}`);
+                    const { transaction } = await response.json();
+
+                    const tx = solanaWeb3.Transaction.from(Buffer.from(transaction, 'base64'));
+                    const signedTx = await connectedWallet.provider.signTransaction(tx);
+                    const serializedTx = signedTx.serialize();
+                    const signature = await solanaWeb3.Connection('https://api.mainnet-beta.solana.fm', 'confirmed').sendRawTransaction(serializedTx);
+
+                    const confirmResponse = await fetch(`${BACKEND_URL}/confirm-solana-transaction`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ signature })
+                    });
+                    if (!confirmResponse.ok) throw new Error(`Confirmation failed: ${await confirmResponse.text()}`);
+                    return await confirmResponse.json();
+                } catch (error) {
+                    console.error('Wallet checkout error:', error);
+                    return { success: false, error: error.message || 'Transaction error' };
                 }
-
-                const transaction = new solanaWeb3.Transaction();
-                const lamports = solanaWeb3.LAMPORTS_PER_SOL * 1;
-                transaction.add(
-                    solanaWeb3.SystemProgram.transfer({
-                        fromPubkey: userPublicKey,
-                        toPubkey: walletAddress,
-                        lamports: lamports,
-                    })
-                );
-
-                const { blockhash } = await connection.getRecentBlockhash();
-                transaction.recentBlockhash = blockhash;
-                transaction.feePayer = userPublicKey;
-
-                const signedTransaction = await connectedWallet.provider.signTransaction(transaction);
-                const signature = await connection.sendRawTransaction(signedTransaction.serialize());
-                await connection.confirmTransaction(signature, 'confirmed');
-
-                status.textContent = `Payment successful! Starting cop process... Tx: ${signature}`;
-                status.style.color = 'var(--neon-lime)';
-
-                const proxyList = proxies ? proxies.split('\n').filter(p => p.trim()) : [];
-                const proxy = proxyList.length ? proxyList[Math.floor(Math.random() * proxyList.length)] : null;
-
-                status.textContent = `Checking stock on ${site}...`;
-                const { inStock } = await fetchStock(site, url);
-                if (!inStock) throw new Error('Item out of stock');
-
-                status.textContent = `Adding to cart on ${site}...`;
-                await simulateDelay(1000, 3000);
-                await addToCart(site, url, size, quantity, proxy);
-
-                status.textContent = `Attempting checkout on ${site}...`;
-                await simulateDelay(2000, 4000);
-                const checkoutSuccess = await checkout(site, url, proxy);
-
-                if (checkoutSuccess) {
-                    status.textContent = `Successfully copped ${quantity} pair(s) of size ${size} from ${site}!`;
-                    status.style.color = 'var(--neon-lime)';
-                    sneakerBotForm.reset();
-                } else {
-                    status.textContent = `Checkout failed on ${site}. Possible queue or sold out.`;
-                    status.style.color = 'var(--vibe-pink)';
-                }
-            } catch (error) {
-                console.error('Copping failed:', error);
-                status.textContent = `Failed: ${error.message || 'Transaction failed'}`;
-                status.style.color = 'var(--vibe-pink)';
-            }
-        }
-
-        async function simulateDelay(min, max) {
-            const delay = Math.floor(Math.random() * (max - min) + min);
-            return new Promise(resolve => setTimeout(resolve, delay));
-        }
-
-        async function addToCart(site, url, size, quantity, proxy) {
-            console.log(`Adding to cart: ${quantity} x ${size} from ${site} via ${proxy || 'no proxy'}`);
-            // Replace with actual cart-adding logic (e.g., API call or browser automation)
-            return new Promise(resolve => setTimeout(() => resolve(true), 1000));
-        }
-
-        async function checkout(site, url, proxy) {
-            console.log(`Checking out from ${site} via ${proxy || 'no proxy'}`);
-            // Replace with actual checkout logic
-            return new Promise(resolve => setTimeout(() => resolve(Math.random() > 0.2), 1500));
-        }
-
-        // Volume Booster Functions
-        async function checkLiquidity(tokenMint) {
-            const connection = new solanaWeb3.Connection('https://api.mainnet-beta.solana.fm', 'confirmed');
-            const tokenPublicKey = new solanaWeb3.PublicKey(tokenMint);
-            const liquidityInfo = document.getElementById('liquidity-info');
-
-            try {
-                const accounts = await connection.getTokenLargestAccounts(tokenPublicKey);
-                const largestAccount = accounts.value[0];
-                const accountInfo = await connection.getTokenAccountBalance(largestAccount.address);
-                const liquidity = accountInfo.value.uiAmount;
-                liquidityInfo.textContent = `Liquidity Pool Size: ${liquidity} SOL`;
-                liquidityInfo.style.color = 'var(--neon-lime)';
-            } catch (error) {
-                console.error('Liquidity check failed:', error);
-                liquidityInfo.textContent = 'Failed to fetch liquidity';
-                liquidityInfo.style.color = 'var(--vibe-pink)';
-            }
-        }
-
-        async function boostMemeCoinVolume(botType, tokenMint, targetVolume, walletCount, profitThreshold, form, status) {
-            if (!connectedWallet) {
-                status.textContent = 'Please connect your Phantom wallet first.';
-                status.style.color = 'var(--vibe-pink)';
-                return;
-            }
-
-            status.textContent = 'Initiating 1 SOL payment and volume boost...';
-            status.style.color = 'var(--vibe-cyan)';
-
-            try {
-                const connection = new solanaWeb3.Connection('https://api.mainnet-beta.solana.fm', 'confirmed');
-                const walletAddress = new solanaWeb3.PublicKey('CdzZ2CVwvbWp19dtpVrN7L1qVJYCSv7p8Fb1xjhnWxxa');
-                let userPublicKey;
-
+            } else if (paymentMethod === 'card') {
+                const billingInfo = JSON.parse(localStorage.getItem('billingInfo') || '{}');
+                if (!billingInfo.card) return { success: false, error: 'Credit card info not provided' };
+                if (!selectedPrice) return { success: false, error: 'Price not available for this sneaker' };
                 try {
-                    userPublicKey = new solanaWeb3.PublicKey(connectedWallet.address);
-                } catch (keyError) {
-                    throw new Error(`Invalid user wallet address: ${connectedWallet.address}`);
-                }
+                    const response = await fetch(`${BACKEND_URL}/create-payment-intent`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            amount: selectedPrice * quantity * 100, // Convert to cents
+                            currency: 'usd',
+                            description: `Purchase of ${quantity} sneakers from ${url}`
+                        })
+                    });
+                    if (!response.ok) throw new Error(`Payment intent creation failed: ${await response.text()}`);
+                    const { clientSecret } = await response.json();
 
-                const transaction = new solanaWeb3.Transaction();
-                const lamports = solanaWeb3.LAMPORTS_PER_SOL * 1;
-                transaction.add(
-                    solanaWeb3.SystemProgram.transfer({
-                        fromPubkey: userPublicKey,
-                        toPubkey: walletAddress,
-                        lamports: lamports,
-                    })
-                );
-
-                const { blockhash } = await connection.getRecentBlockhash();
-                transaction.recentBlockhash = blockhash;
-                transaction.feePayer = userPublicKey;
-
-                const signedTransaction = await connectedWallet.provider.signTransaction(transaction);
-                const signature = await connection.sendRawTransaction(signedTransaction.serialize());
-                await connection.confirmTransaction(signature, 'confirmed');
-
-                status.textContent = `Payment successful! Starting volume boost... Tx: ${signature}`;
-                status.style.color = 'var(--neon-lime)';
-
-                const wallets = [];
-                for (let i = 0; i < walletCount; i++) {
-                    const keypair = solanaWeb3.Keypair.generate();
-                    wallets.push(keypair);
-                    await connection.requestAirdrop(keypair.publicKey, solanaWeb3.LAMPORTS_PER_SOL * 0.1);
-                }
-
-                let currentVolume = 0;
-                const tokenPublicKey = new solanaWeb3.PublicKey(tokenMint);
-
-                while (currentVolume < targetVolume) {
-                    for (const wallet of wallets) {
-                        const buyAmount = (Math.random() * 0.05 + 0.01).toFixed(6);
-                        const sellAmount = buyAmount * (Math.random() * 0.1 + 0.9);
-                        const interval = Math.floor(Math.random() * 3000) + 1000;
-
-                        const buyTx = new solanaWeb3.Transaction().add(
-                            solanaWeb3.SystemProgram.transfer({
-                                fromPubkey: wallet.publicKey,
-                                toPubkey: tokenPublicKey,
-                                lamports: solanaWeb3.LAMPORTS_PER_SOL * buyAmount
-                            })
-                        );
-                        buyTx.recentBlockhash = (await connection.getRecentBlockhash()).blockhash;
-                        buyTx.feePayer = wallet.publicKey;
-                        const signedBuyTx = await wallet.signTransaction(buyTx);
-                        await connection.sendRawTransaction(signedBuyTx.serialize());
-
-                        const price = await getTokenPrice(tokenMint);
-                        if (price >= profitThreshold) {
-                            const sellAllTx = new solanaWeb3.Transaction().add(
-                                solanaWeb3.SystemProgram.transfer({
-                                    fromPubkey: wallet.publicKey,
-                                    toPubkey: userPublicKey,
-                                    lamports: solanaWeb3.LAMPORTS_PER_SOL * sellAmount
-                                })
-                            );
-                            sellAllTx.recentBlockhash = (await connection.getRecentBlockhash()).blockhash;
-                            sellAllTx.feePayer = wallet.publicKey;
-                            const signedSellAllTx = await wallet.signTransaction(sellAllTx);
-                            await connection.sendRawTransaction(signedSellAllTx.serialize());
+                    const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, {
+                        payment_method: {
+                            card: {
+                                number: billingInfo.card,
+                                exp_month: parseInt(billingInfo.expiry.split('/')[0]),
+                                exp_year: parseInt(billingInfo.expiry.split('/')[1]),
+                                cvc: billingInfo.cvv
+                            },
+                            billing_details: {
+                                name: billingInfo.name,
+                                address: { line1: billingInfo.address }
+                            }
                         }
-
-                        currentVolume += parseFloat(buyAmount);
-                        status.textContent = `Boosting volume: ${currentVolume.toFixed(2)}/${targetVolume} SOL`;
-                        await new Promise(resolve => setTimeout(resolve, interval));
-                    }
+                    });
+                    if (error) throw new Error(error.message);
+                    return { success: true, signature: paymentIntent.id };
+                } catch (error) {
+                    console.error('Card checkout error:', error);
+                    return { success: false, error: error.message || 'Payment error' };
                 }
-
-                status.textContent = `Volume boost complete! Final Volume: ${currentVolume.toFixed(2)} SOL`;
-                form.reset();
-                await checkLiquidity(tokenMint);
-            } catch (error) {
-                console.error('Volume boost failed:', error);
-                status.textContent = `Failed: ${error.message || 'Transaction failed'}`;
-                status.style.color = 'var(--vibe-pink)';
             }
         }
 
-        async function getTokenPrice(tokenMint) {
-            return 1; // Placeholder
-        }
-
-        // Event Listeners
-        const volumeBotForm = document.querySelector('.volume-bot-form');
-        if (volumeBotForm) {
-            volumeBotForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const botType = volumeBotForm.dataset.type;
-                const tokenMint = volumeBotForm.querySelector('[name="tokenMint"]').value;
-                const targetVolume = parseFloat(volumeBotForm.querySelector('[name="volume"]').value);
-                const walletCount = parseInt(volumeBotForm.querySelector('[name="wallets"]').value);
-                const profitThreshold = parseFloat(volumeBotForm.querySelector('[name="profitThreshold"]').value);
-                const status = volumeBotForm.nextElementSibling;
-                await boostMemeCoinVolume(botType, tokenMint, targetVolume, walletCount, profitThreshold, volumeBotForm, status);
+        async function openBillingPopup(url, quantity) {
+            return new Promise((resolve) => {
+                const popup = window.open('billing.html', 'Billing Confirmation', 'width=600,height=400');
+                if (!popup) {
+                    alert('Please allow popups for this site');
+                    resolve(false);
+                    return;
+                }
+                localStorage.setItem('pendingPurchase', JSON.stringify({ url, quantity }));
+                const checkInterval = setInterval(() => {
+                    if (popup.closed) {
+                        clearInterval(checkInterval);
+                        const confirmed = localStorage.getItem('purchaseConfirmed') === 'true';
+                        localStorage.removeItem('purchaseConfirmed');
+                        localStorage.removeItem('pendingPurchase');
+                        resolve(confirmed);
+                    }
+                }, 500);
             });
         }
 
-        if (sneakerBotForm) {
-            sneakerBotForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const site = sneakerBotForm.querySelector('[name="sites"]').selectedOptions[0]?.value;
-                const url = sneakerBotForm.querySelector('[name="url"]').value;
-                const size = sneakerBotForm.querySelector('[name="size"]').value;
-                const quantity = parseInt(sneakerBotForm.querySelector('[name="quantity"]').value);
-                const proxies = sneakerBotForm.querySelector('[name="proxies"]').value;
-                await copSneakers(site, url, size, quantity, proxies, sneakerBotStatus);
-            });
+        // Queue Monitoring (Not implemented due to StockX API limitations)
+        const queueStatus = document.getElementById('queue-status');
+        async function startQueueMonitor() {
+            queueStatus.textContent = 'Queue monitoring not available with current StockX API.';
         }
 
-        console.log('Script execution completed');
+        // Barcode Scanner
+        const collectionList = document.getElementById('collection-list');
+        async function scanBarcode() {
+            const barcode = document.getElementById('barcode-input').value;
+            if (!barcode) return;
+            try {
+                const response = await fetch(`${BACKEND_URL}/search-sneakers?name=${encodeURIComponent(barcode)}`);
+                if (!response.ok) throw new Error(`Barcode search failed: ${await response.text()}`);
+                const sneakers = await response.json();
+                if (sneakers.length === 0) throw new Error('No sneaker found for this barcode');
+                const sneaker = sneakers[0];
+                const item = document.createElement('div');
+                item.innerHTML = `
+                    <p>${sneaker.name} - Resale: $${sneaker.price}</p>
+                    <p>Brand: ${sneaker.brand} | Size: ${sneaker.size}</p>
+                `;
+                collectionList.appendChild(item);
+                document.getElementById('barcode-input').value = '';
+            } catch (error) {
+                console.error('Barcode error:', error);
+                collectionList.innerHTML += `<p>Failed to fetch sneaker info: ${error.message}</p>`;
+            }
+        }
 
-        // Initialize sizes on page load
-        populateSizes();
+        // Volume Bot Logic (Placeholder)
+        document.querySelector('.volume-bot-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Volume boost not implemented yet.');
+        });
     </script>
 </body>
 </html>

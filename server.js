@@ -1,137 +1,122 @@
 const express = require('express');
-const { Connection, PublicKey, TOKEN_PROGRAM_ID } = require('@solana/web3.js');
-const puppeteer = require('puppeteer');
+const stripe = require('stripe')('sk_test_your_secret_key'); // Replace with your Stripe secret key
+const { Connection, PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL } = require('@solana/web3.js');
+const fetch = require('node-fetch');
 const app = express();
-const port = 3000;
 
 app.use(express.json());
-app.use(express.static('public'));
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*'); // Allow CORS for testing
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    next();
+});
 
-// Solana setup
-const solConnection = new Connection('https://api.mainnet-beta.solana.fm', 'confirmed');
-const solUsdcMint = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
-const solWalletAddress = new PublicKey('CdzZ2CVwvbWp19dtpVrN7L1qVJYCSv7p8Fb1xjhnWxxa'); // Updated Solana USDC wallet address
+// StockX API configuration
+const STOCKX_API_KEY = 'your_stockx_api_key'; // Replace with your StockX API key
+const STOCKX_API_URL = 'https://api.stockx.com/v1';
 
-// Validate Solana wallet address
-if (solWalletAddress.toString() === 'YOUR_SOLANA_USDC_WALLET') {
-    throw new Error('Please replace YOUR_SOLANA_USDC_WALLET with a valid base58-encoded Solana wallet address in server.js');
-}
+// Solana connection
+const solanaConnection = new Connection('https://api.mainnet-beta.solana.fm', 'confirmed');
+const recipientAddress = 'CdzZ2CVwvbWp19dtpVrN7L1qVJYCSv7p8Fb1xjhnWxxa'; // Replace if needed
 
-// Bot logic (mocked for now)
-async function universalChainSync(crypto, volume) {
-    console.log(`Syncing ${volume} volume for ${crypto} across chains...`);
-    return `Universal Chain Sync deployed for ${crypto} with ${volume} volume`;
-}
-
-async function hyperVolumeBoost(crypto, volume) {
-    console.log(`Boosting ${volume} volume for ${crypto}...`);
-    return `Hyper Volume Boost deployed for ${crypto} with ${volume} volume`;
-}
-
-async function instantDeploy(crypto, volume) {
-    console.log(`Instantly deploying ${volume} volume for ${crypto}...`);
-    return `Instant Deployment deployed for ${crypto} with ${volume} volume`;
-}
-
-async function solanaRaydiumVolume(crypto, volume) {
-    console.log(`Boosting ${volume} SOL volume on Raydium...`);
-    // Replace with real logic from solana-volume-bot.js once uploaded
-    return `Solana Raydium Volume Bot deployed for ${crypto} with ${volume} volume`;
-}
-
-async function sneakerBot(url, size, quantity) {
-    const browser = await puppeteer.launch({ headless: true });
-    const page = await browser.newPage();
-    await page.goto(url);
-    console.log(`Buying ${quantity} sneakers of size ${size} from ${url}...`);
-    await browser.close();
-    return `Sneaker Bot copped ${quantity} sneakers of size ${size} from ${url}`;
-}
-
-async function payWithSolana(userPublicKey, botType, volume) {
-    const fee = 100 * 10 ** 6; // 100 USDC in lamports
-    const status = `Initiating payment for ${botType} bot with ${volume} volume...`;
-    console.log(status);
-
+// Search sneakers
+app.get('/search-sneakers', async (req, res) => {
+    const { name, brand, size } = req.query;
+    if (!name) return res.status(400).json({ error: 'Sneaker name is required' });
     try {
-        const connection = new Connection('https://api.mainnet-beta.solana.fm', 'confirmed');
-        const usdcMint = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
-        const userPublicKeyObj = new PublicKey(userPublicKey);
+        const response = await fetch(`${STOCKX_API_URL}/search?query=${encodeURIComponent(name)}&facets=brand:${encodeURIComponent(brand || '')}&size=${size || ''}`, {
+            headers: { 'Authorization': `Bearer ${STOCKX_API_KEY}` }
+        });
+        if (!response.ok) throw new Error(`StockX API request failed: ${response.statusText}`);
+        const data = await response.json();
+        const results = data.hits.map(item => ({
+            name: item.name,
+            url: `https://stockx.com/${item.urlKey}`,
+            price: item.lowestAsk || item.lastSale,
+            size: item.size || size || 'N/A',
+            brand: item.brand,
+            store: 'StockX',
+            inStock: item.available || false,
+            productId: item.productId // For cart/purchase
+        })).filter(item => item.inStock && item.price);
+        if (results.length === 0) return res.status(404).json({ error: 'No sneakers found in stock' });
+        res.json(results);
+    } catch (error) {
+        console.error('Search error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
 
-        // Fetch user's USDC token account
-        const tokenAccounts = await connection.getTokenAccountsByOwner(userPublicKeyObj, { mint: usdcMint });
-        if (tokenAccounts.value.length === 0) {
-            throw new Error('No USDC token account found for the user');
-        }
+// Add to cart (StockX doesn’t expose this publicly; placeholder for a real store API)
+app.post('/add-to-cart', async (req, res) => {
+    const { productId, quantity } = req.body;
+    if (!productId || !quantity) return res.status(400).json({ error: 'Product ID and quantity are required' });
+    try {
+        // StockX requires authenticated user actions via their private API or SDK
+        // Replace with a real store API (e.g., Shopify, Nike) for actual cart functionality
+        console.log(`Adding ${quantity} of product ${productId} to cart (placeholder)`);
+        res.status(501).json({ error: 'Cart functionality not implemented for StockX public API' });
+    } catch (error) {
+        console.error('Cart error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
 
-        const userTokenAccount = tokenAccounts.value[0].pubkey;
+// Create Stripe PaymentIntent
+app.post('/create-payment-intent', async (req, res) => {
+    const { amount, currency, description } = req.body;
+    if (!amount || !currency || !description) return res.status(400).json({ error: 'Amount, currency, and description are required' });
+    try {
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount, // In cents
+            currency,
+            description
+        });
+        res.json({ clientSecret: paymentIntent.client_secret });
+    } catch (error) {
+        console.error('Payment intent error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
 
-        // Create transaction
-        const transaction = new solanaWeb3.Transaction().add(
-            solanaWeb3.Token.createTransferInstruction(
-                TOKEN_PROGRAM_ID,
-                userTokenAccount,
-                solWalletAddress,
-                userPublicKeyObj,
-                [],
-                fee
-            )
+// Process Solana payment
+app.post('/process-solana-payment', async (req, res) => {
+    const { senderAddress, amount } = req.body;
+    if (!senderAddress || !amount) return res.status(400).json({ error: 'Sender address and amount are required' });
+    try {
+        const lamports = LAMPORTS_PER_SOL * amount;
+        const transaction = new Transaction().add(
+            SystemProgram.transfer({
+                fromPubkey: new PublicKey(senderAddress),
+                toPubkey: new PublicKey(recipientAddress),
+                lamports
+            })
         );
+        const { blockhash } = await solanaConnection.getRecentBlockhash();
+        transaction.recentBlockhash = blockhash;
+        transaction.feePayer = new PublicKey(senderAddress);
 
-        // Send transaction
-        const signature = await solanaWeb3.sendAndConfirmTransaction(connection, transaction, [userPublicKeyObj]);
-        console.log(`Payment successful with signature: ${signature}`);
-        return `Payment successful for ${botType} bot with ${volume} volume. Transaction signature: ${signature}`;
+        const serializedTx = transaction.serializeMessage().toString('base64');
+        res.json({ transaction: serializedTx });
     } catch (error) {
-        console.error('Payment failed:', error);
-        throw new Error(`Payment failed: ${error.message}`);
+        console.error('Solana payment error:', error);
+        res.status(500).json({ error: error.message });
     }
-}
+});
 
-// Verify payment endpoint
-app.post('/verify-payment', async (req, res) => {
-    const { walletType, txHash, botType, crypto, volume, userAddress } = req.body;
-    const feeExpected = 100 * 10 ** 6;
-
+// Confirm Solana transaction
+app.post('/confirm-solana-transaction', async (req, res) => {
+    const { signature } = req.body;
+    if (!signature) return res.status(400).json({ error: 'Transaction signature is required' });
     try {
-        if (walletType === 'Phantom') {
-            const tx = await solConnection.getParsedTransaction(txHash, { maxSupportedTransactionVersion: 0 });
-            if (!tx || tx.meta.err) throw new Error('Transaction failed');
-
-            const tokenAccounts = await solConnection.getTokenAccountsByOwner(new PublicKey(userAddress), { mint: solUsdcMint });
-            const transfer = tx.meta.innerInstructions
-                .flatMap(i => i.instructions)
-                .find(i => 
-                    i.programId.equals(TOKEN_PROGRAM_ID) &&
-                    i.parsed.type === 'transfer' &&
-                    i.parsed.info.destination === solWalletAddress.toString() &&
-                    i.parsed.info.source === tokenAccounts.value[0].pubkey.toString()
-                );
-
-            if (!transfer || transfer.parsed.info.amount < feeExpected) {
-                throw new Error('Insufficient or incorrect USDC payment');
-            }
-        } else {
-            throw new Error('Unsupported wallet type');
-        }
-
-        // Payment verified, deploy bot
-        let message;
-        switch (botType.toLowerCase()) {
-            case 'chain sync': message = await universalChainSync(crypto, volume); break;
-            case 'volume boost': message = await hyperVolumeBoost(crypto, volume); break;
-            case 'instant deploy': message = await instantDeploy(crypto, volume); break;
-            case 'solana raydium volume': message = await solanaRaydiumVolume(crypto, volume); break;
-            case 'sneaker bot': message = await sneakerBot(crypto, volume.split('-')[0], volume.split('-')[1]); break;
-            default: throw new Error('Unknown bot type');
-        }
-
-        res.json({ success: true, message });
+        const confirmation = await solanaConnection.confirmTransaction(signature, 'confirmed');
+        if (confirmation.value.err) throw new Error('Transaction failed on chain');
+        res.json({ success: true, signature });
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        console.error('Confirmation error:', error);
+        res.status(500).json({ error: error.message });
     }
 });
 
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
+app.listen(3000, () => console.log('Server running on port 3000'));
