@@ -607,6 +607,188 @@ html, body {
     text-shadow: 0 0 10px var(--vibe-cyan);
 }
 
+/* Modern Sneaker Bot Styles */
+.modern-section {
+    padding: 60px 20px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 15px;
+    margin: 40px auto;
+    max-width: 900px;
+    box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
+}
+
+.section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem;
+    color: var(--neon-lime);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.section-subtitle {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.2rem;
+    color: var(--vibe-cyan);
+    margin-bottom: 30px;
+}
+
+.sneaker-bot-container {
+    background: rgba(20, 20, 20, 0.9);
+    padding: 30px;
+    border-radius: 10px;
+    border: 1px solid var(--vibe-cyan);
+}
+
+.modern-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 1rem;
+    color: var(--neon-lime);
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--vibe-cyan);
+    border-radius: 5px;
+    padding: 10px;
+    color: var(--neon-lime);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--neon-lime);
+    box-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+}
+
+.form-group select[multiple] {
+    height: 120px;
+}
+
+.form-group input[readonly] {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--vibe-cyan);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.button {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    padding: 12px 25px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.primary-button {
+    background: var(--neon-lime);
+    color: #000;
+    border: none;
+}
+
+.primary-button:hover {
+    background: var(--vibe-cyan);
+    box-shadow: 0 0 15px rgba(57, 255, 20, 0.7);
+}
+
+.secondary-button {
+    background: transparent;
+    color: var(--neon-lime);
+    border: 2px solid var(--neon-lime);
+}
+
+.secondary-button:hover {
+    background: rgba(57, 255, 20, 0.2);
+    box-shadow: 0 0 15px rgba(57, 255, 20, 0.5);
+}
+
+.status-message {
+    margin-top: 20px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.lookup-results {
+    margin-top: 20px;
+    max-height: 200px;
+    overflow-y: auto;
+    text-align: left;
+}
+
+.lookup-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--vibe-cyan);
+    color: var(--neon-lime);
+    font-family: 'Rajdhani', sans-serif;
+}
+
+.lookup-item .select-button {
+    background: var(--vibe-cyan);
+    color: #000;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+.lookup-item .select-button:hover {
+    background: var(--neon-lime);
+    box-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
 @media only screen and (max-width: 768px) {
     .signup {
         text-align: center;
