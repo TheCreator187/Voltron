@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=width-device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="VoltronBot - Volume bots for every cryptocurrency and sneaker automation. Boost your trading and copping power.">
     <meta name="keywords" content="crypto volume bots, sneaker bot, cryptocurrency trading, blockchain automation">
     <meta name="author" content="CryptoVoltron Team">
     <title>VoltronBot - Unleash the Future of Trading</title>
-    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;800&family=Orbitron:wght@500;700&family=Rajdhani:wght@ словами400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;800&family=Orbitron:wght@500;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -39,7 +39,7 @@
         <div class="content">
             <h1>Empower Your Trading with VoltronBot</h1>
             <p>Deploy advanced volume and sneaker bots for just 1 SOL each—payable via Phantom wallet.</p>
-            <button id="add-wallet-btn" class="button">Connect Phantom Wallet</button>
+            <button id="add-wallet-btn" class="button" onclick="connectWallet()">Connect Phantom Wallet</button>
             <div id="wallet-status" class="wallet-status"></div>
         </div>
     </section>
@@ -184,191 +184,196 @@
     <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
 
     <script>
-        window.addEventListener('load', () => {
-            console.log('Window loaded. Checking library availability...');
-            console.log('solanaWeb3:', typeof solanaWeb3 !== 'undefined' ? 'Loaded' : 'Not Loaded');
+        console.log('Script started executing...');
 
-            const { solanaWeb3 } = window;
+        // Particle.js setup
+        if (typeof particlesJS !== 'undefined') {
+            particlesJS("particles-js", {
+                particles: {
+                    number: { value: 120, density: { enable: true, value_area: 800 } },
+                    color: { value: "#39ff14" },
+                    shape: { type: "polygon", polygon: { nb_sides: 6 } },
+                    opacity: { value: 0.7, random: true },
+                    size: { value: 3, random: true },
+                    line_linked: { enable: true, distance: 100, color: "#ff1a8c", opacity: 0.6, width: 1.2 },
+                    move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
+                },
+                interactivity: {
+                    detect_on: "canvas",
+                    events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: true, mode: "push" }, resize: true },
+                    modes: { grab: { distance: 150, line_linked: { opacity: 0.8 } }, push: { particles_nb: 4 } }
+                },
+                retina_detect: true
+            });
+            console.log('Particles.js initialized');
+        } else {
+            console.error('particlesJS not loaded');
+        }
 
-            // Particle.js setup
-            if (typeof particlesJS !== 'undefined') {
-                particlesJS("particles-js", {
-                    particles: {
-                        number: { value: 120, density: { enable: true, value_area: 800 } },
-                        color: { value: "#39ff14" },
-                        shape: { type: "polygon", polygon: { nb_sides: 6 } },
-                        opacity: { value: 0.7, random: true },
-                        size: { value: 3, random: true },
-                        line_linked: { enable: true, distance: 100, color: "#ff1a8c", opacity: 0.6, width: 1.2 },
-                        move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
-                    },
-                    interactivity: {
-                        detect_on: "canvas",
-                        events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: true, mode: "push" }, resize: true },
-                        modes: { grab: { distance: 150, line_linked: { opacity: 0.8 } }, push: { particles_nb: 4 } }
-                    },
-                    retina_detect: true
-                });
-            } else {
-                console.error('particlesJS not loaded');
-            }
+        // Navbar and menu functionality
+        window.addEventListener('scroll', () => {
+            document.querySelector('.navbar').classList.toggle('sticky', window.scrollY > 0);
+        });
 
-            // Navbar and menu functionality
-            window.addEventListener('scroll', () => {
-                document.querySelector('.navbar').classList.toggle('sticky', window.scrollY > 0);
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        if (menuToggle && navLinks) {
+            menuToggle.addEventListener('click', (event) => {
+                event.stopPropagation();
+                navLinks.classList.toggle('active');
             });
 
-            const menuToggle = document.querySelector('.menu-toggle');
-            const navLinks = document.querySelector('.nav-links');
+            document.addEventListener('click', (event) => {
+                if (!menuToggle.contains(event.target) && !navLinks.contains(event.target)) {
+                    navLinks.classList.remove('active');
+                }
+            });
+            console.log('Menu toggle initialized');
+        } else {
+            console.error('Menu toggle or nav links not found');
+        }
 
-            if (menuToggle && navLinks) {
-                menuToggle.addEventListener('click', (event) => {
-                    event.stopPropagation();
-                    navLinks.classList.toggle('active');
-                });
+        // Signup form
+        const signupForm = document.getElementById('signup-form');
+        if (signupForm) {
+            signupForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Account activated! Welcome to VoltronBot.');
+            });
+            console.log('Signup form initialized');
+        } else {
+            console.error('Signup form not found');
+        }
 
-                document.addEventListener('click', (event) => {
-                    if (!menuToggle.contains(event.target) && !navLinks.contains(event.target)) {
-                        navLinks.classList.remove('active');
-                    }
-                });
-            } else {
-                console.error('Menu toggle or nav links not found');
-            }
+        // Wallet connection logic
+        console.log('Checking for wallet button...');
+        const walletButton = document.getElementById('add-wallet-btn');
+        const walletStatus = document.getElementById('wallet-status');
 
-            // Signup form
-            const signupForm = document.getElementById('signup-form');
-            if (signupForm) {
-                signupForm.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    alert('Account activated! Welcome to VoltronBot.');
-                });
-            } else {
-                console.error('Signup form not found');
-            }
+        if (!walletButton || !walletStatus) {
+            console.error('Wallet button or status element not found');
+        } else {
+            console.log('Wallet button found, attaching event listener...');
+            walletButton.addEventListener('click', () => {
+                console.log('Connect Phantom Wallet button clicked (via addEventListener)');
+                connectWallet();
+            });
+        }
 
-            // Wallet connection logic (Phantom only)
-            const walletButton = document.getElementById('add-wallet-btn');
-            const walletStatus = document.getElementById('wallet-status');
+        let connectedWallet = null;
 
-            if (!walletButton || !walletStatus) {
-                console.error('Wallet button or status element not found');
+        function truncateAddress(address) {
+            return `${address.slice(0, 6)}...${address.slice(-4)}`;
+        }
+
+        function connectWallet() {
+            console.log('connectWallet function called');
+            alert('Button clicked! Attempting to connect Phantom wallet...'); // Test alert
+
+            const solProvider = window.solana;
+            console.log('Solana provider:', solProvider ? 'Detected' : 'Not Detected');
+
+            if (!solProvider || !solProvider.isPhantom) {
+                walletStatus.textContent = 'Please install Phantom wallet.';
+                walletStatus.style.color = 'var(--vibe-pink)';
+                console.error('Phantom wallet not detected');
                 return;
             }
 
-            console.log('Wallet button found, attaching event listener...');
-            walletButton.addEventListener('click', () => {
-                console.log('Connect Phantom Wallet button clicked');
-                connectWallet();
-            });
+            walletStatus.textContent = 'Connecting Phantom wallet...';
+            walletStatus.style.color = 'var(--vibe-cyan)';
 
-            let connectedWallet = null;
-
-            function truncateAddress(address) {
-                return `${address.slice(0, 6)}...${address.slice(-4)}`;
-            }
-
-            async function connectWallet() {
-                console.log('connectWallet function called');
-                
-                const solProvider = window.solana;
-
-                console.log('Solana provider:', solProvider ? 'Detected' : 'Not Detected');
-
-                if (!solProvider || !solProvider.isPhantom) {
-                    walletStatus.textContent = 'Please install Phantom wallet.';
-                    walletStatus.style.color = 'var(--vibe-pink)';
-                    console.error('Phantom wallet not detected');
-                    return;
-                }
-
-                walletStatus.textContent = 'Connecting Phantom wallet...';
-                walletStatus.style.color = 'var(--vibe-cyan)';
-
-                try {
-                    await solProvider.connect();
+            try {
+                solProvider.connect().then(() => {
                     const address = solProvider.publicKey.toString();
                     connectedWallet = { type: 'Phantom', address, provider: solProvider };
                     walletStatus.textContent = `Connected via Phantom: ${truncateAddress(address)}`;
                     walletStatus.style.color = 'var(--neon-lime)';
                     console.log('Phantom connected:', address);
-                } catch (error) {
+                }).catch(error => {
                     console.error('Wallet connection failed:', error);
                     walletStatus.textContent = `Connection failed: ${error.message || 'Unknown error'}`;
                     walletStatus.style.color = 'var(--vibe-pink)';
-                }
-            }
-
-            // Updated payment function for 1 SOL
-            async function payWithWallet(botType, crypto, volume, form, status) {
-                if (!connectedWallet) {
-                    status.textContent = 'Please connect your Phantom wallet first.';
-                    status.style.color = 'var(--vibe-pink)';
-                    return;
-                }
-
-                status.textContent = 'Initiating 1 SOL payment...';
-                status.style.color = 'var(--vibe-cyan)';
-
-                try {
-                    const connection = new solanaWeb3.Connection('https://api.mainnet-beta.solana.fm', 'confirmed');
-                    const walletAddress = new solanaWeb3.PublicKey('YOUR_SOLANA_WALLET_ADDRESS'); // Replace with your Solana wallet address
-                    const userPublicKey = new solanaWeb3.PublicKey(connectedWallet.address);
-
-                    const transaction = new solanaWeb3.Transaction();
-                    const lamports = solanaWeb3.LAMPORTS_PER_SOL * 1; // 1 SOL in lamports
-
-                    transaction.add(
-                        solanaWeb3.SystemProgram.transfer({
-                            fromPubkey: userPublicKey,
-                            toPubkey: walletAddress,
-                            lamports: lamports,
-                        })
-                    );
-
-                    const { blockhash } = await connection.getRecentBlockhash();
-                    transaction.recentBlockhash = blockhash;
-                    transaction.feePayer = userPublicKey;
-
-                    const signedTransaction = await connectedWallet.provider.signTransaction(transaction);
-                    const signature = await connection.sendRawTransaction(signedTransaction.serialize());
-                    await connection.confirmTransaction(signature, 'confirmed');
-
-                    status.textContent = `Payment successful! Transaction Hash: ${signature}`;
-                    status.style.color = 'var(--neon-lime)';
-                    form.reset();
-                } catch (error) {
-                    console.error('Payment failed:', error);
-                    status.textContent = `Payment failed: ${error.message}`;
-                    status.style.color = 'var(--vibe-pink)';
-                }
-            }
-
-            // Attach payment handlers to forms
-            const volumeBotForms = document.querySelectorAll('.volume-bot-form');
-            volumeBotForms.forEach(form => {
-                form.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const botType = form.dataset.type;
-                    const crypto = form.querySelector('[name="crypto"]').value;
-                    const volume = form.querySelector('[name="volume"]').value;
-                    const status = form.nextElementSibling;
-                    await payWithWallet(botType, crypto, volume, form, status);
                 });
+            } catch (error) {
+                console.error('Wallet connection failed:', error);
+                walletStatus.textContent = `Connection failed: ${error.message || 'Unknown error'}`;
+                walletStatus.style.color = 'var(--vibe-pink)';
+            }
+        }
+
+        // Payment function
+        async function payWithWallet(botType, crypto, volume, form, status) {
+            if (!connectedWallet) {
+                status.textContent = 'Please connect your Phantom wallet first.';
+                status.style.color = 'var(--vibe-pink)';
+                return;
+            }
+
+            status.textContent = 'Initiating 1 SOL payment...';
+            status.style.color = 'var(--vibe-cyan)';
+
+            try {
+                const connection = new solanaWeb3.Connection('https://api.mainnet-beta.solana.fm', 'confirmed');
+                const walletAddress = new solanaWeb3.PublicKey('YOUR_SOLANA_WALLET_ADDRESS'); // Replace with your Solana wallet address
+                const userPublicKey = new solanaWeb3.PublicKey(connectedWallet.address);
+
+                const transaction = new solanaWeb3.Transaction();
+                const lamports = solanaWeb3.LAMPORTS_PER_SOL * 1; // 1 SOL in lamports
+
+                transaction.add(
+                    solanaWeb3.SystemProgram.transfer({
+                        fromPubkey: userPublicKey,
+                        toPubkey: walletAddress,
+                        lamports: lamports,
+                    })
+                );
+
+                const { blockhash } = await connection.getRecentBlockhash();
+                transaction.recentBlockhash = blockhash;
+                transaction.feePayer = userPublicKey;
+
+                const signedTransaction = await connectedWallet.provider.signTransaction(transaction);
+                const signature = await connection.sendRawTransaction(signedTransaction.serialize());
+                await connection.confirmTransaction(signature, 'confirmed');
+
+                status.textContent = `Payment successful! Transaction Hash: ${signature}`;
+                status.style.color = 'var(--neon-lime)';
+                form.reset();
+            } catch (error) {
+                console.error('Payment failed:', error);
+                status.textContent = `Payment failed: ${error.message}`;
+                status.style.color = 'var(--vibe-pink)';
+            }
+        }
+
+        // Attach payment handlers to forms
+        const volumeBotForms = document.querySelectorAll('.volume-bot-form');
+        volumeBotForms.forEach(form => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const botType = form.dataset.type;
+                const crypto = form.querySelector('[name="crypto"]').value;
+                const volume = form.querySelector('[name="volume"]').value;
+                const status = form.nextElementSibling;
+                await payWithWallet(botType, crypto, volume, form, status);
             });
-
-            const sneakerBotForm = document.getElementById('sneaker-bot-form');
-            if (sneakerBotForm) {
-                sneakerBotForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const url = sneakerBotForm.querySelector('[name="url"]').value;
-                    const size = sneakerBotForm.querySelector('[name="size"]').value;
-                    const quantity = sneakerBotForm.querySelector('[name="quantity"]').value;
-                    const status = document.getElementById('sneaker-bot-status');
-                    await payWithWallet('sneaker-bot', { url, size, quantity }, null, sneakerBotForm, status);
-                });
-            }
         });
+
+        const sneakerBotForm = document.getElementById('sneaker-bot-form');
+        if (sneakerBotForm) {
+            sneakerBotForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const url = sneakerBotForm.querySelector('[name="url"]').value;
+                const size = sneakerBotForm.querySelector('[name="size"]').value;
+                const quantity = sneakerBotForm.querySelector('[name="quantity"]').value;
+                const status = document.getElementById('sneaker-bot-status');
+                await payWithWallet('sneaker-bot', { url, size, quantity }, null, sneakerBotForm, status);
+            });
+        }
+
+        console.log('Script execution completed');
     </script>
 </body>
 </html>
